@@ -40,31 +40,30 @@ class _MapScreenState extends State<MapScreen> {
 
   // Show a custom popup or widget
   void _showCustomPopup(event) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return Dialog(
-        backgroundColor: Colors.transparent,
-        insetPadding: EdgeInsets.zero,
-        child: Container(
-          width: MediaQuery.of(context).size.width / 3,
-          height: MediaQuery.of(context).size.height / 2,
-          child: EventPopupCard(
-            avatarInitial: event.eventOwnerName[0],
-            eventTitle: event.eventTitle,
-            eventOwnerName: event.eventOwnerName,
-            eventOwnerEmail: event.eventOwnerContactMail,
-            eventDescription: event.eventDesc,
-            assembledAmount: event.eventCurrentMoney,
-            totalGoalAmount: event.eventGoal,
-            growersCount: event.eventContributorsNumber,
-            benefitsText: event.eventBenefitDesc
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          insetPadding: EdgeInsets.zero,
+          child: Container(
+            width: MediaQuery.of(context).size.width / 3,
+            height: MediaQuery.of(context).size.height / 2,
+            child: EventPopupCard(
+                avatarInitial: event.eventOwnerName[0],
+                eventTitle: event.eventTitle,
+                eventOwnerName: event.eventOwnerName,
+                eventOwnerEmail: event.eventOwnerContactMail,
+                eventDescription: event.eventDesc,
+                assembledAmount: event.eventCurrentMoney,
+                totalGoalAmount: event.eventGoal,
+                growersCount: event.eventContributorsNumber,
+                benefitsText: event.eventBenefitDesc),
           ),
-        ),
-      );
-    },
-  );
-}
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
