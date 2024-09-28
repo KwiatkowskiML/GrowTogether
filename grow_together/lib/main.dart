@@ -1,6 +1,5 @@
-// main.dart
 import 'package:flutter/material.dart';
-import 'package:grow_together/widgets/event_popup_card.dart';
+import 'package:grow_together/widgets/event_popup_card/event_popup_card.dart';
 import 'package:grow_together/widgets/map.dart';
 
 void main() {
@@ -33,7 +32,25 @@ class TestApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const EventPopupCard(),
+      home: Scaffold(
+        appBar: AppBar(title: const Text('Event Popup Test')),
+        body: const Padding(
+          padding: EdgeInsets.all(16.0),
+          child: EventPopupCard(
+            avatarInitial: 'A',
+            eventTitle: 'Charity Run',
+            eventOwnerName: 'John Doe',
+            eventOwnerEmail: 'john.doe@gmail.com',
+            eventDescription:
+                'Join us for a charity run to raise funds for cancer research. Every contribution counts!',
+            assembledAmount: 1423,
+            totalGoalAmount: 2000,
+            growersCount: 242,
+            benefitsText:
+                'You will get a 10% discount on all products. Your contribution helps us make a difference!',
+          ),
+        ),
+      ),
     );
   }
 }

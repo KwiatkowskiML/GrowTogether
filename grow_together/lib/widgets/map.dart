@@ -18,14 +18,12 @@ class _MapScreenState extends State<MapScreen> {
     _setMarkers();
   }
 
-  // Set custom markers on the map
   void _setMarkers() {
     _markers.add(
       Marker(
         markerId: const MarkerId('customMarker'),
         position: const LatLng(37.42796133580664, -122.085749655962),
-        icon: BitmapDescriptor.defaultMarkerWithHue(
-            BitmapDescriptor.hueAzure), // You can use custom icons too
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
         onTap: () {
           _showCustomPopup();
         },
