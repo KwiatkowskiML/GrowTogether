@@ -3,3 +3,5 @@ bin/
 lib/
 .idea/
 __pycache__/
+events.db
+log.txt

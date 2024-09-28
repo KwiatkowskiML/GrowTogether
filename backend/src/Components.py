@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Union
 
-from GlobalObj import GlobalObj
-from Logger import Logger, LogLevel
+from .GlobalObj import GlobalObj
+from .Logger import Logger, LogLevel
 
 if TYPE_CHECKING:
     from .EventMgr import EventMgr

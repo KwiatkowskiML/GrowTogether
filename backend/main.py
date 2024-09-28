@@ -2,8 +2,8 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
-from Components import Components
-from Models import EventModel, CommandResponse, AllEventsResponse, EventPay
+from src.Components import Components
+from src.Models import EventModel, CommandResponse, AllEventsResponse, EventPay
 
 
 def startup():
