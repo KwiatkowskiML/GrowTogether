@@ -48,3 +48,9 @@ async def pay_for_event(pay: EventPay) -> CommandResponse:
     except Exception as e:
         return CommandResponse(result=f"{e}")
     return CommandResponse(result="SUCCESS")
+
+
+if __name__ == '__main__':
+    import uvicorn
+
+    uvicorn.run(app)
