@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:grow_together/widgets/add_event_button.dart';
-import 'package:grow_together/widgets/event_popup_card/event_popup_card.dart';
 import 'package:grow_together/widgets/floating_search_bar.dart';
 import 'package:grow_together/widgets/map.dart';
 
@@ -34,16 +33,8 @@ class HomeScreen extends StatelessWidget {
         title: const Text('Google Maps in Flutter'),
       ),
       body: Stack(
-        children: <Widget>[
-          MapScreen(),
-          FloatingSearchBar(),
-          AddEventButton()
-        ],
+        children: <Widget>[MapScreen(), FloatingSearchBar(), AddEventButton()],
       ),
     );
   }
 }
-
-
-
-

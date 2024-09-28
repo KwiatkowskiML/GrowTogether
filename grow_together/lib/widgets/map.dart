@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:grow_together/events/eventsList.dart';
-import 'package:grow_together/widgets/event_popup_card/event_popup_card.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -20,45 +18,37 @@ class _MapScreenState extends State<MapScreen> {
     _setMarkers();
   }
 
+  // Set custom markers on the map
   void _setMarkers() {
-    for (var event in eventsList) {
-      var marker = Marker(
-        markerId: MarkerId(event.eventTitle),
-        position: LatLng(event.eventLat, event.eventLon),
-        // infoWindow: InfoWindow(
-        //   title: event.eventTitle,
-        //   snippet: event.eventDesc,
-        // ),
+    _markers.add(
+      Marker(
+        markerId: const MarkerId('customMarker'),
+        position: const LatLng(37.42796133580664, -122.085749655962),
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
         onTap: () {
-          _showCustomPopup(event);
+          _showCustomPopup();
         },
-      );
-
-      _markers.add(marker);
-    }
+      ),
+    );
   }
 
   // Show a custom popup or widget
-  void _showCustomPopup(event) {
-    showDialog(
+  void _showCustomPopup() {
+    showModalBottomSheet(
       context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          backgroundColor: Colors.transparent,
-          insetPadding: EdgeInsets.zero,
-          child: Container(
-            width: MediaQuery.of(context).size.width / 3,
-            height: MediaQuery.of(context).size.height / 2,
-            child: EventPopupCard(
-                avatarInitial: event.eventOwnerName[0],
-                eventTitle: event.eventTitle,
-                eventOwnerName: event.eventOwnerName,
-                eventOwnerEmail: event.eventOwnerContactMail,
-                eventDescription: event.eventDesc,
-                assembledAmount: event.eventCurrentMoney,
-                totalGoalAmount: event.eventGoal,
-                growersCount: event.eventContributorsNumber,
-                benefitsText: event.eventBenefitDesc),
+      builder: (context) {
+        return const SizedBox(
+          height: 200,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Custom Marker Popup',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 10),
+              Text('This popup appears when you tap on the marker.'),
+            ],
           ),
         );
       },
@@ -73,7 +63,7 @@ class _MapScreenState extends State<MapScreen> {
           _controller = controller;
         },
         initialCameraPosition: const CameraPosition(
-          target: LatLng(50.049683, 19.944544),
+          target: LatLng(37.42796133580664, -122.085749655962),
           zoom: 14,
         ),
         markers: _markers,
