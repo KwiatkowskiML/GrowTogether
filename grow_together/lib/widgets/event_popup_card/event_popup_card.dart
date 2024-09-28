@@ -62,7 +62,7 @@ class EventPopupCard extends StatelessWidget {
             BenefitsSection(benefitsText: benefitsText),
             SizedBox(height: 16),
             Expanded(child: Container()),
-            ActionButtonsSection(),
+            ActionButtonsSection(eventName: eventTitle),
           ],
         ),
       ),
