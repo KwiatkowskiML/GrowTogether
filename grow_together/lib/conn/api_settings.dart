@@ -10,12 +10,8 @@ class Endpoints {
 
 class Urls {
   const Urls();
-  final String apiUrl = '';
+  final String apiUrl = 'https://grow-backend-1049102182349.europe-west1.run.app/';
   final String siteUrl = '';
-
-  String parseQrCode(String sessionId) {
-    return '$siteUrl/#/session/$sessionId';
-  }
 }
 
 class Requests {
