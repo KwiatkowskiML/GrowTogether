@@ -1,4 +1,4 @@
-from models import EventModel
+from Models import EventModel
 
 if __name__ == "__main__":
     event = EventModel(eventTitle="Test Event",

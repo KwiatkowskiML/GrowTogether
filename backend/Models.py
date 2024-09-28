@@ -18,3 +18,17 @@ class EventModel(BaseModel):
     eventEndDate: datetime
     eventOwnerContactMail: EmailStr
     eventBenefitDesc: Optional[str] = None
+
+
+class CommandResponse(BaseModel):
+    result: str
+
+
+class EventPay(BaseModel):
+    eventName: str
+    eventAmount: float
+
+
+class AllEventsResponse(BaseModel):
+    events: list[EventModel]
+    result: str
