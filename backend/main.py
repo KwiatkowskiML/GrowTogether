@@ -1,6 +1,6 @@
 from contextlib import asynccontextmanager
-
 from fastapi import FastAPI
+import uvicorn
 
 from src.Components import Components
 from src.Models import EventModel, CommandResponse, AllEventsResponse, EventPay
@@ -19,7 +19,6 @@ async def lifespan(app: FastAPI):
     # Process starting actions
     startup()
     yield
-
     # Process stopping actions
     cleanup()
 
@@ -51,6 +50,5 @@ async def pay_for_event(pay: EventPay) -> CommandResponse:
 
 
 if __name__ == '__main__':
-    import uvicorn
-
-    uvicorn.run(app)
+    # Run the FastAPI app using Uvicorn, setting host and port
+    uvicorn.run(app, host="0.0.0.0", port=80)
