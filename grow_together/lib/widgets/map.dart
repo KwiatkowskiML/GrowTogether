@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:grow_together/events/eventsList.dart';
 
 class MapScreen extends StatefulWidget {
   @override
@@ -18,17 +19,22 @@ class _MapScreenState extends State<MapScreen> {
 
   // Set custom markers on the map
   void _setMarkers() {
-    _markers.add(
-      Marker(
-        markerId: MarkerId('customMarker'),
-        position: LatLng(37.42796133580664, -122.085749655962),
-        icon: BitmapDescriptor.defaultMarkerWithHue(
-            BitmapDescriptor.hueAzure), // You can use custom icons too
+    for (var event in eventsList) {
+      var marker = Marker(
+        markerId: MarkerId(event.eventTitle),
+        position: LatLng(event.eventLat, event.eventLon),
+        infoWindow: InfoWindow(
+          title: event.eventTitle,
+          snippet: event.eventDesc,
+        ),
         onTap: () {
-          _showCustomPopup();
+          // _showCustomPopup();
         },
-      ),
-    );
+      );
+
+      
+      _markers.add(marker);
+    }
   }
 
   // Show a custom popup or widget
@@ -61,8 +67,8 @@ class _MapScreenState extends State<MapScreen> {
         onMapCreated: (GoogleMapController controller) {
           _controller = controller;
         },
-        initialCameraPosition: CameraPosition(
-          target: LatLng(37.42796133580664, -122.085749655962),
+        initialCameraPosition: const CameraPosition(
+          target: LatLng(50.049683, 19.944544),
           zoom: 14,
         ),
         markers: _markers,
