@@ -10,7 +10,7 @@ class ActionButtonsSection extends StatelessWidget {
       children: [
         TextButton(
           onPressed: () {
-            // Handle Cancel button action
+            Navigator.of(context).pop();
           },
           child: Text('Cancel'),
           style: TextButton.styleFrom(

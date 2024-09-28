@@ -19,9 +19,11 @@ class GreekVineBorderCard extends StatelessWidget {
                   child: body,
                 ),
                 Positioned.fill(
-                  child: SvgPicture.asset(
-                    'card/vine_border.svg',
-                    fit: BoxFit.fill,
+                  child: IgnorePointer(
+                    child: SvgPicture.asset(
+                      'card/vine_border.svg',
+                      fit: BoxFit.fill,
+                    ),
                   ),
                 ),
               ],
