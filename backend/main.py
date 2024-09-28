@@ -1,13 +1,7 @@
 from fastapi import FastAPI
-
+from models import EventModel
 app = FastAPI()
 
-
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
-
-
-@app.get("/hello/{name}")
-async def say_hello(name: str):
+@app.get("/events/add")
+async def say_hello(model: EventModel):
     return {"message": f"Hello {name}"}
