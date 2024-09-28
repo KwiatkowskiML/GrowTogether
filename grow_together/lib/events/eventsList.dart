@@ -21,7 +21,7 @@ List<Event> eventsList = [
     eventOwnerName: "Green Thumb Association",
     eventOwnerId: 102,
     eventGoal: 3000.0,
-    eventCurrentMoney: 800.0,
+    eventCurrentMoney: 2900.0,
     eventContributorsNumber: 40,
     eventLat: 50.0670, 
     eventLon: 19.9455, 

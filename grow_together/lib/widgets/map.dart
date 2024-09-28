@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:grow_together/events/eventsList.dart';
+import 'package:grow_together/widgets/event_popup_card/event_popup_card.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -20,43 +21,40 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   void _setMarkers() {
-    for (var event in eventsList) {
-      var marker = Marker(
-        markerId: MarkerId(event.eventTitle),
-        position: LatLng(event.eventLat, event.eventLon),
-        infoWindow: InfoWindow(
-          title: event.eventTitle,
-          snippet: event.eventDesc,
-        ),
-        onTap: () {
-          // _showCustomPopup();
-        },
-      );
+      for (var event in eventsList) {
+        var marker = Marker(
+          markerId: MarkerId(event.eventTitle),
+          position: LatLng(event.eventLat, event.eventLon),
+          // infoWindow: InfoWindow(
+          //   title: event.eventTitle,
+          //   snippet: event.eventDesc,
+          // ),
+          onTap: () {
+            _showCustomPopup(event);
+          },
+        );
 
-      
-      _markers.add(marker);
-    }
+        
+        _markers.add(marker);
+      }
   }
 
   // Show a custom popup or widget
-  void _showCustomPopup() {
+  void _showCustomPopup(event) {
     showModalBottomSheet(
       context: context,
       builder: (context) {
-        return const SizedBox(
-          height: 200,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Custom Marker Popup',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 10),
-              Text('This popup appears when you tap on the marker.'),
-            ],
-          ),
-        );
+        return EventPopupCard(
+            avatarInitial: event.eventOwnerName[0],
+            eventTitle: event.eventTitle,
+            eventOwnerName: event.eventOwnerName,
+            eventOwnerEmail: event.eventOwnerContactMail,
+            eventDescription: event.eventDesc,
+            assembledAmount: event.eventCurrentMoney,
+            totalGoalAmount: event.eventGoal,
+            growersCount: event.eventContributorsNumber,
+            benefitsText: event.eventBenefitDesc
+          );
       },
     );
   }
