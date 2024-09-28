@@ -64,7 +64,6 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Google Maps in Flutter'),
       ),
-<<<<<<< HEAD
       body: Stack(
         children: <Widget>[
           // Replace this container with your Map widget
@@ -160,9 +159,6 @@ class AddEventButton extends StatelessWidget {
           ],
         ),
       ),
-=======
-      body: const MapScreen(),
->>>>>>> main
     );
   }
 }

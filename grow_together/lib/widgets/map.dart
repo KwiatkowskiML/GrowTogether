@@ -20,7 +20,6 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   void _setMarkers() {
-<<<<<<< HEAD
     for (var event in eventsList) {
       var marker = Marker(
         markerId: MarkerId(event.eventTitle),
@@ -29,13 +28,6 @@ class _MapScreenState extends State<MapScreen> {
           title: event.eventTitle,
           snippet: event.eventDesc,
         ),
-=======
-    _markers.add(
-      Marker(
-        markerId: const MarkerId('customMarker'),
-        position: const LatLng(37.42796133580664, -122.085749655962),
-        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
->>>>>>> main
         onTap: () {
           // _showCustomPopup();
         },
@@ -77,11 +69,7 @@ class _MapScreenState extends State<MapScreen> {
           _controller = controller;
         },
         initialCameraPosition: const CameraPosition(
-<<<<<<< HEAD
           target: LatLng(50.049683, 19.944544),
-=======
-          target: LatLng(37.42796133580664, -122.085749655962),
->>>>>>> main
           zoom: 14,
         ),
         markers: _markers,
