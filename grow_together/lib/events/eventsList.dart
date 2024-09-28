@@ -1,4 +1,4 @@
-import 'package:grow_together/events/event.dart';
+import 'package:grow_together/models/event.dart';
 
 List<Event> eventsList = [
   Event(
