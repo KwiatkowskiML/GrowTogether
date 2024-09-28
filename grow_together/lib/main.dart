@@ -5,12 +5,8 @@ import 'package:grow_together/widgets/floating_search_bar.dart';
 import 'package:grow_together/widgets/map.dart';
 
 void main() {
-<<<<<<< HEAD
   // runApp(GrowTogetherApp());
   runApp(const GrowTogetherApp());
-=======
-  runApp(GrowTogetherApp());
->>>>>>> 5005bd0c322c1b52e8d254903e92cef0def24bc8
 }
 
 class GrowTogetherApp extends StatelessWidget {
