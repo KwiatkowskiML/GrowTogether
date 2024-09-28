@@ -1,5 +1,5 @@
-import 'package:easyvault/services/api_client.dart';
-import 'package:easyvault/services/api_client_interface.dart';
+import './api_client.dart';
+import './api_client_interface.dart';
 
 class Endpoints {
   const Endpoints();
