@@ -56,13 +56,13 @@ class EventMgr(ModelObject):
             return list(self._events.values())
 
     def pay_for_event(self, pay: EventPay) -> None:
-        Logger().log_info(f"Event '{pay.eventTitle}' paid: {pay.model_dump_json()}", LogLevel.LOW_FREQ)
+        Logger().log_info(f"Event '{pay.eventName}' paid: {pay.model_dump_json()}", LogLevel.LOW_FREQ)
 
         with self.get_lock():
-            if pay.eventTitle not in self._events:
-                raise ValueError(f"Event with title '{pay.eventTitle}' not found")
+            if pay.eventName not in self._events:
+                raise ValueError(f"Event with title '{pay.eventName}' not found")
 
-            self._events[pay.eventName].eventCurrentMoney += pay.payAmount
+            self._events[pay.eventName].eventCurrentMoney += pay.eventAmount
             self._events[pay.eventName].eventContributionsNumber += 1
             self._save_events_to_db_unlocked()
 
@@ -77,7 +77,8 @@ class EventMgr(ModelObject):
 
         # if db file exists - move it to backup
         if os.path.exists(DB_PATH):
-            os.remove(DB_PATH_TMP)
+            if os.path.exists(DB_PATH_TMP):
+                os.remove(DB_PATH_TMP)
             os.rename(DB_PATH, DB_PATH_TMP)
 
         with open(DB_PATH, "w") as f:
