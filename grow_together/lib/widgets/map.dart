@@ -3,13 +3,15 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:grow_together/events/eventsList.dart';
 
 class MapScreen extends StatefulWidget {
+  const MapScreen({super.key});
+
   @override
   _MapScreenState createState() => _MapScreenState();
 }
 
 class _MapScreenState extends State<MapScreen> {
   GoogleMapController? _controller;
-  Set<Marker> _markers = Set<Marker>();
+  final Set<Marker> _markers = <Marker>{};
 
   @override
   void initState() {
@@ -17,8 +19,8 @@ class _MapScreenState extends State<MapScreen> {
     _setMarkers();
   }
 
-  // Set custom markers on the map
   void _setMarkers() {
+<<<<<<< HEAD
     for (var event in eventsList) {
       var marker = Marker(
         markerId: MarkerId(event.eventTitle),
@@ -27,6 +29,13 @@ class _MapScreenState extends State<MapScreen> {
           title: event.eventTitle,
           snippet: event.eventDesc,
         ),
+=======
+    _markers.add(
+      Marker(
+        markerId: const MarkerId('customMarker'),
+        position: const LatLng(37.42796133580664, -122.085749655962),
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
+>>>>>>> main
         onTap: () {
           // _showCustomPopup();
         },
@@ -42,7 +51,7 @@ class _MapScreenState extends State<MapScreen> {
     showModalBottomSheet(
       context: context,
       builder: (context) {
-        return Container(
+        return const SizedBox(
           height: 200,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -68,7 +77,11 @@ class _MapScreenState extends State<MapScreen> {
           _controller = controller;
         },
         initialCameraPosition: const CameraPosition(
+<<<<<<< HEAD
           target: LatLng(50.049683, 19.944544),
+=======
+          target: LatLng(37.42796133580664, -122.085749655962),
+>>>>>>> main
           zoom: 14,
         ),
         markers: _markers,

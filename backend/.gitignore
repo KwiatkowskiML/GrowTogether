@@ -1,0 +1,8 @@
+# created by virtualenv automatically
+bin/
+lib/
+.idea/
+__pycache__/
+events.db
+log.txt
+events.db.tmp
