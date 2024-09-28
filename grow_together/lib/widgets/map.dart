@@ -21,30 +21,35 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   void _setMarkers() {
-      for (var event in eventsList) {
-        var marker = Marker(
-          markerId: MarkerId(event.eventTitle),
-          position: LatLng(event.eventLat, event.eventLon),
-          // infoWindow: InfoWindow(
-          //   title: event.eventTitle,
-          //   snippet: event.eventDesc,
-          // ),
-          onTap: () {
-            _showCustomPopup(event);
-          },
-        );
+    for (var event in eventsList) {
+      var marker = Marker(
+        markerId: MarkerId(event.eventTitle),
+        position: LatLng(event.eventLat, event.eventLon),
+        // infoWindow: InfoWindow(
+        //   title: event.eventTitle,
+        //   snippet: event.eventDesc,
+        // ),
+        onTap: () {
+          _showCustomPopup(event);
+        },
+      );
 
-        
-        _markers.add(marker);
-      }
+      _markers.add(marker);
+    }
   }
 
   // Show a custom popup or widget
   void _showCustomPopup(event) {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return EventPopupCard(
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return Dialog(
+        backgroundColor: Colors.transparent,
+        insetPadding: EdgeInsets.zero,
+        child: Container(
+          width: MediaQuery.of(context).size.width / 3,
+          height: MediaQuery.of(context).size.height / 2,
+          child: EventPopupCard(
             avatarInitial: event.eventOwnerName[0],
             eventTitle: event.eventTitle,
             eventOwnerName: event.eventOwnerName,
@@ -54,10 +59,12 @@ class _MapScreenState extends State<MapScreen> {
             totalGoalAmount: event.eventGoal,
             growersCount: event.eventContributorsNumber,
             benefitsText: event.eventBenefitDesc
-          );
-      },
-    );
-  }
+          ),
+        ),
+      );
+    },
+  );
+}
 
   @override
   Widget build(BuildContext context) {
