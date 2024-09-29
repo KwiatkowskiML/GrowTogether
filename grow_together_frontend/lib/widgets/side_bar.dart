@@ -62,7 +62,10 @@ class _SideBarState extends State<SideBar> {
               width: 20,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [Colors.blue.withOpacity(0.3), Colors.blue.withOpacity(0.1)],
+                  colors: [
+                    Colors.purple.withOpacity(0.3),
+                    Colors.purple.withOpacity(0.1)
+                  ],
                   begin: Alignment.centerRight,
                   end: Alignment.centerLeft,
                 ),
@@ -77,14 +80,15 @@ class _SideBarState extends State<SideBar> {
   Widget _buildHeader() {
     return Container(
       padding: EdgeInsets.all(16),
-      color: Colors.blue,
+      color: Colors.purple,
       child: Row(
         children: [
           Icon(Icons.dashboard, color: Colors.white),
           SizedBox(width: 8),
           Text(
             'Dashboard',
-            style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+            style: TextStyle(
+                color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
           ),
         ],
       ),
@@ -111,7 +115,7 @@ class _SideBarState extends State<SideBar> {
         decoration: BoxDecoration(
           border: Border(
             bottom: BorderSide(
-              color: _currentPage == index ? Colors.blue : Colors.transparent,
+              color: _currentPage == index ? Colors.purple : Colors.transparent,
               width: 2,
             ),
           ),
@@ -120,8 +124,9 @@ class _SideBarState extends State<SideBar> {
           title,
           textAlign: TextAlign.center,
           style: TextStyle(
-            color: _currentPage == index ? Colors.blue : Colors.black54,
-            fontWeight: _currentPage == index ? FontWeight.bold : FontWeight.normal,
+            color: _currentPage == index ? Colors.purple : Colors.black54,
+            fontWeight:
+                _currentPage == index ? FontWeight.bold : FontWeight.normal,
           ),
         ),
       ),
@@ -188,7 +193,8 @@ class _SideBarState extends State<SideBar> {
                 SizedBox(height: 4),
                 Text('Contributions: ${event.eventContributionsNumber}'),
                 SizedBox(height: 8),
-                Text('${_formatDate(event.eventStartDate)} - ${_formatDate(event.eventEndDate)}'),
+                Text(
+                    '${_formatDate(event.eventStartDate)} - ${_formatDate(event.eventEndDate)}'),
               ],
             ),
           ),
