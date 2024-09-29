@@ -86,19 +86,4 @@ List<Event> eventsList = [
     eventBenefitDesc:
         "Donate 100 PLN and get a 115 PLN voucher for future meals and drinks at our café.",
   ),
-  Event(
-    eventTitle: "Eco-Friendly Café Renovation",
-    eventOwnerName: "Green Café Cracow",
-    eventOwnerId: 105,
-    eventGoal: 10000.0,
-    eventCurrentMoney: 3500.0,
-    eventContributorsNumber: 80,
-    eventLat: 50.0603,
-    eventLon: 19.9305,
-    eventDesc: "Help us renovate o to Cracow.",
-    eventStartDate: DateTime(2024, 10, 1),
-    eventEndDate: DateTime(2024, 12, 20),
-    eventOwnerContactMail: "support@greencafe.pl",
-    eventBenefitDesc: "Donate 100 ",
-  ),
 ];
