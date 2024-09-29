@@ -26,9 +26,14 @@ class GrowTogetherApp extends StatelessWidget {
   }
 }
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,12 +43,18 @@ class HomeScreen extends StatelessWidget {
           Padding(padding: const EdgeInsets.all(8.0), child: LoginWidget()),
         ],
       ),
-      body: Stack(
-        children: <Widget>[
-          MapScreen(),
-          FloatingSearchBar(),
-          UserSingleton().isLogged() ? SideBar() : Container()
-        ],
+      body: StreamBuilder<bool>(
+        stream: UserSingleton().loginStream,
+        initialData: UserSingleton().isLogged(),
+        builder: (context, snapshot) {
+          return Stack(
+            children: <Widget>[
+              MapScreen(),
+              FloatingSearchBar(),
+              if (snapshot.data == true) SideBar(),
+            ],
+          );
+        },
       ),
     );
   }
