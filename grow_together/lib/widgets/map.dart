@@ -10,12 +10,33 @@ class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
 
   @override
-  _MapScreenState createState() => _MapScreenState();
+  MapScreenState createState() => MapScreenState();
 }
 
-class _MapScreenState extends State<MapScreen> {
+class MapScreenState extends State<MapScreen> {
   GoogleMapController? _controller;
   final Set<Marker> _markers = <Marker>{};
+
+  double lat = 50.049683;
+  double lon = 19.944544;
+
+  void updatePosition(newLat, newLon) {
+    setState(() {
+      lat = newLat;
+      lon = newLon;
+      if (_controller != null){
+
+          _controller!.animateCamera(CameraUpdate.newLatLngZoom(LatLng(lat, lon), 14));
+
+      }
+    });
+  }
+
+  void showPopUp(event){
+    setState(() {
+      _showCustomPopup(event);
+    });
+  }
 
   @override
   void initState() {
@@ -121,6 +142,9 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print("building");
+    print(lat);
+    print(lon);
     return Scaffold(
       body: GoogleMap(
         onMapCreated: (GoogleMapController controller) {
@@ -156,8 +180,8 @@ class _MapScreenState extends State<MapScreen> {
             });
           });
         },
-        initialCameraPosition: const CameraPosition(
-          target: LatLng(50.049683, 19.944544),
+        initialCameraPosition: CameraPosition(
+          target: LatLng(lat, lon),
           zoom: 14,
         ),
         markers: _markers,
