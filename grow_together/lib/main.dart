@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grow_together/user.dart';
 import 'package:grow_together/widgets/floating_search_bar.dart';
 import 'package:grow_together/widgets/login_widget.dart';
 import 'package:grow_together/widgets/map.dart';
@@ -38,7 +39,11 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
       body: Stack(
-        children: <Widget>[MapScreen(), FloatingSearchBar()],
+        children: <Widget>[
+          MapScreen(),
+          FloatingSearchBar(),
+          UserSingleton().isLogged() ? SideBar() : Container()
+        ],
       ),
     );
   }

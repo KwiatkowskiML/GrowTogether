@@ -68,7 +68,7 @@ class _SideBarState extends State<SideBar> {
           top: 0,
           bottom: 0,
           child: MouseRegion(
-            onEnter: (_) => setState(() => _isExpanded = UserSingleton().isLogged()),
+            onEnter: (_) => setState(() => _isExpanded = true),
             child: Container(
               width: 20,
               decoration: BoxDecoration(
