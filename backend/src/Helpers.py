@@ -6,14 +6,23 @@ from .Logger import Logger, LogLevel
 def save_to_db(db_path: str, db_temp_path: str, model: str) -> None:
     Logger().log_info(f"Saving objects to DB: {db_path}", LogLevel.LOW_FREQ)
 
-    # if db file exists - move it to backup
-    if os.path.exists(db_path):
-        if os.path.exists(db_temp_path):
-            os.remove(db_temp_path)
-        os.rename(db_path, db_temp_path)
+    try:
+        # if db file exists - move it to backup
+        if os.path.exists(db_path):
+            Logger().log_info("Creating backup", LogLevel.LOW_FREQ)
+            if os.path.exists(db_temp_path):
+                Logger().log_info("Removing old backup", LogLevel.LOW_FREQ)
+                os.remove(db_temp_path)
 
-    with open(db_path, "w") as f:
-        f.write(model)
+            os.rename(db_path, db_temp_path)
+
+        Logger().log_info(f"Saving objects to db: {db_path}", LogLevel.LOW_FREQ)
+
+        with open(db_path, "w") as f:
+            f.write(model)
+    except Exception as e:
+        Logger().log_error(f"Failed to save objects to DB ({db_path}): {e}", LogLevel.LOW_FREQ)
+        return
 
     Logger().log_info(f"Saved objects to db: {db_temp_path}", LogLevel.LOW_FREQ)
 
