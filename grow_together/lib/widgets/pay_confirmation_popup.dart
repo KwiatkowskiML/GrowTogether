@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:grow_together/conn/api_calls.dart';
 import 'package:grow_together/models/event_pay.dart';
 
+import '../user.dart';
+
 class PayConfirmationPopUp extends StatelessWidget {
   const PayConfirmationPopUp({
     super.key,
@@ -64,7 +66,7 @@ class PayConfirmationPopUp extends StatelessWidget {
                         if (_formKey.currentState!.validate()) {
                           double amount = double.parse(_controller.text);
                           var eventPay = EventPay(
-                              eventName: _eventName, eventAmount: amount);
+                              eventName: _eventName, eventAmount: amount, userId: UserSingleton().token!);
                           try {
                             await ApiCalls.payEvent(eventPay);
                             Navigator.of(context)
