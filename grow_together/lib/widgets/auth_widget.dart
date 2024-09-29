@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:email_validator/email_validator.dart'; // Import email validator package
 
 import '../user.dart';
 
@@ -24,11 +25,15 @@ class _AuthFormState extends State<AuthForm> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
+          // Email Field with Proper Validation
           TextFormField(
             decoration: const InputDecoration(labelText: 'Email'),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter your email';
+              }
+              if (!EmailValidator.validate(value)) {
+                return 'Please enter a valid email address';
               }
               return null;
             },
@@ -36,6 +41,7 @@ class _AuthFormState extends State<AuthForm> {
               _email = value!;
             },
           ),
+          // Password Field with Minimum Length Check
           TextFormField(
             decoration: const InputDecoration(labelText: 'Password'),
             obscureText: true,
@@ -43,12 +49,18 @@ class _AuthFormState extends State<AuthForm> {
               if (value == null || value.isEmpty) {
                 return 'Please enter your password';
               }
+              if (value.length < 6) {
+                return 'Password must be at least 6 characters long';
+              }
               return null;
             },
-            onSaved: (value) {
-              _password = value!;
+            onChanged: (value) {
+              setState(() {
+                _password = value;
+              });
             },
           ),
+          // Confirm Password Field for Registration
           if (!widget.isLogin)
             TextFormField(
               decoration: const InputDecoration(labelText: 'Confirm Password'),
@@ -71,6 +83,7 @@ class _AuthFormState extends State<AuthForm> {
             child: ElevatedButton(
               child: Text(widget.isLogin ? 'Login' : 'Register'),
               onPressed: () async {
+                // Validate the form before saving the data
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
 
@@ -105,6 +118,7 @@ class _AuthFormState extends State<AuthForm> {
     );
   }
 
+  // Modal for switching between login and register
   void _showAuthModal(BuildContext context, {required bool isLogin}) {
     showDialog(
       context: context,

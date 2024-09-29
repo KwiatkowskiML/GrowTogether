@@ -15,9 +15,9 @@ class GrowTogetherApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Grow Together app',
+      title: 'Grow Together',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.purple,
       ),
       home: const HomeScreen(),
     );
@@ -31,12 +31,9 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Grow Together app'),
+        title: const Text('Grow Together'),
         actions: [
-          Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: LoginWidget()
-          ),
+          Padding(padding: const EdgeInsets.all(8.0), child: LoginWidget()),
         ],
       ),
       body: Stack(

@@ -19,7 +19,7 @@ class LoginWidget extends StatelessWidget {
       },
       style: ElevatedButton.styleFrom(
         foregroundColor: Colors.green,
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.purple,
       ),
     );
   }
