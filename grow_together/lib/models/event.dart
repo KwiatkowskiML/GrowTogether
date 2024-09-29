@@ -4,7 +4,7 @@ class Event {
   int? eventOwnerId; // Nullable
   double eventGoal;
   double eventCurrentMoney;
-  int eventContributorsNumber;
+  int eventContributionsNumber;
   double eventLat;
   double eventLon;
   String eventDesc;
@@ -19,7 +19,7 @@ class Event {
     this.eventOwnerId,
     required this.eventGoal,
     required this.eventCurrentMoney,
-    required this.eventContributorsNumber,
+    required this.eventContributionsNumber,
     required this.eventLat,
     required this.eventLon,
     required this.eventDesc,
@@ -36,7 +36,7 @@ class Event {
     'eventOwnerId': eventOwnerId,
     'eventGoal': eventGoal,
     'eventCurrentMoney': eventCurrentMoney,
-    'eventContributorsNumber': eventContributorsNumber,
+    'eventContributionsNumber': eventContributionsNumber,
     'eventLat': eventLat,
     'eventLon': eventLon,
     'eventDesc': eventDesc,
@@ -54,7 +54,7 @@ class Event {
       eventOwnerId: json['eventOwnerId'], // Nullable, can be null
       eventGoal: (json['eventGoal'] as num).toDouble(), // Ensures conversion to double
       eventCurrentMoney: (json['eventCurrentMoney'] as num).toDouble(), // Ensures conversion to double
-      eventContributorsNumber: json['eventContributorsNumber'],
+      eventContributionsNumber: json['eventContributionsNumber'],
       eventLat: (json['eventLat'] as num).toDouble(), // Ensures conversion to double
       eventLon: (json['eventLon'] as num).toDouble(), // Ensures conversion to double
       eventDesc: json['eventDesc'],

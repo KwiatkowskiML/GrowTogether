@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:grow_together/conn/api_calls.dart';
 import 'package:grow_together/user.dart';
 import 'package:grow_together/widgets/floating_search_bar.dart';
 import 'package:grow_together/widgets/login_widget.dart';
 import 'package:grow_together/widgets/map.dart';
 import 'package:grow_together/widgets/side_bar.dart';
-import 'package:grow_together/events/eventsList.dart';
 import 'package:grow_together/widgets/login_widget.dart';
 import 'package:grow_together/widgets/map.dart';
 import 'package:grow_together/models/event.dart';
@@ -40,12 +40,13 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<Widget> _buildSearchSuggestions(
-      String query, SearchController controller) {
+  Future<List<Widget>> _buildSearchSuggestions(
+      String query, SearchController controller) async {
     if (query.isEmpty) return [];
 
+    var events = await ApiCalls.getEvents();
     final lowercaseQuery = query.toLowerCase();
-    final filteredEvents = eventsList
+    final filteredEvents = events
         .where(
             (event) => event.eventTitle.toLowerCase().contains(lowercaseQuery))
         .toList();

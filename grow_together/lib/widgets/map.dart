@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:grow_together/events/eventsList.dart';
+import 'package:grow_together/conn/api_calls.dart';
 import 'package:grow_together/user.dart';
 import 'package:grow_together/widgets/event_creation_form/event_creation_form.dart';
 import 'package:grow_together/widgets/event_popup_card/event_popup_card.dart';
@@ -44,8 +44,9 @@ class MapScreenState extends State<MapScreen> {
     _setMarkers();
   }
 
-  void _setMarkers() {
-    for (var event in eventsList) {
+  void _setMarkers() async {
+    var events = await ApiCalls.getEvents();
+    for (var event in events) {
       var marker = Marker(
         markerId: MarkerId(event.eventTitle),
         position: LatLng(event.eventLat, event.eventLon),
@@ -64,21 +65,22 @@ class MapScreenState extends State<MapScreen> {
     }
   }
 
-  void _filterEventsByViewport(LatLngBounds bounds) {
+  void _filterEventsByViewport(LatLngBounds bounds) async {
     setState(() {
-      _markers.clear();
-      for (var event in eventsList) {
-        if (_isInBounds(bounds, LatLng(event.eventLat, event.eventLon))) {
-          var marker = Marker(
-            markerId: MarkerId(event.eventTitle),
-            position: LatLng(event.eventLat, event.eventLon),
-            onTap: () {
-              _showCustomPopup(event);
-            },
-          );
-          _markers.add(marker);
-        }
-      }
+      // _markers.clear();
+      // var events = await ApiCalls.getEvents();
+      // for (var event in events) {
+      //   if (_isInBounds(bounds, LatLng(event.eventLat, event.eventLon))) {
+      //     var marker = Marker(
+      //       markerId: MarkerId(event.eventTitle),
+      //       position: LatLng(event.eventLat, event.eventLon),
+      //       onTap: () {
+      //         _showCustomPopup(event);
+      //       },
+      //     );
+      //     _markers.add(marker);
+      //   }
+      // }
     });
   }
 
@@ -122,7 +124,7 @@ class MapScreenState extends State<MapScreen> {
                     eventDescription: event.eventDesc,
                     assembledAmount: event.eventCurrentMoney,
                     totalGoalAmount: event.eventGoal,
-                    growersCount: event.eventContributorsNumber,
+                    growersCount: event.eventContributionsNumber,
                     benefitsText: event.eventBenefitDesc,
                   ),
                 ),

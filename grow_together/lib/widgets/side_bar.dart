@@ -186,7 +186,7 @@ class _SideBarState extends State<SideBar> {
                 SizedBox(height: 4),
                 Text('Raised: \$${event.eventCurrentMoney.toStringAsFixed(2)}'),
                 SizedBox(height: 4),
-                Text('Contributors: ${event.eventContributorsNumber}'),
+                Text('Contributions: ${event.eventContributionsNumber}'),
                 SizedBox(height: 8),
                 Text('${_formatDate(event.eventStartDate)} - ${_formatDate(event.eventEndDate)}'),
               ],

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:grow_together/events/eventsList.dart';
+import 'package:grow_together/conn/api_calls.dart';
 import 'package:intl/intl.dart';
 import 'package:grow_together/models/event.dart';
 
@@ -58,7 +58,7 @@ class _EventCreationFormState extends State<EventCreationForm> {
         eventOwnerId: widget.eventOwnerId,
         eventGoal: double.tryParse(_eventGoalController.text) ?? 0.0,
         eventCurrentMoney: 0.0, // Default to 0
-        eventContributorsNumber: 0, // Default to 0
+        eventContributionsNumber: 0, // Default to 0
         eventLat: widget.eventLat,
         eventLon: widget.eventLon,
         eventDesc: _eventDescController.text,
@@ -73,8 +73,8 @@ class _EventCreationFormState extends State<EventCreationForm> {
   }
 
   // Dummy function to handle form data submission
-  void _sendData(Event formData) {
-    eventsList.add(formData);
+  void _sendData(Event formData) async {
+    await ApiCalls.deployEvent(formData);
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (context) => SuccessScreen(),
