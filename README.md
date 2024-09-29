@@ -1,3 +1,6 @@
+![image](https://github.com/user-attachments/assets/4d443171-c1d0-411c-b4c3-168fc6ef9598)
+![image](https://github.com/user-attachments/assets/23fcc6a1-8740-43a9-bdd3-e06784e51b04)
+
 # **GrowTogether** - Community Crowdfunding Platform for Local Businesses
 
 **GrowTogether** is a community-focused crowdfunding platform that empowers local small and medium-sized businesses (SMEs) to raise funds for essential needs such as equipment upgrades, renovations, or new services. In return, loyal customers who contribute receive long-term benefits, such as exclusive discounts or rewards from the businesses they support.
