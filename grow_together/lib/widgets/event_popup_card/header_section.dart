@@ -16,19 +16,27 @@ class HeaderSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Calculate scaling factor based on screen width
+    double screenWidth = MediaQuery.of(context).size.width;
+    double scaleFactor = (screenWidth / 375.0).clamp(1.0, 1.5);
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Row(
           children: [
             CircleAvatar(
+              radius: 20 * scaleFactor, // Adjust radius
               backgroundColor: Colors.purple,
               child: Text(
                 avatarInitial,
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16 * scaleFactor,
+                ),
               ),
             ),
-            SizedBox(width: 10),
+            SizedBox(width: 10 * scaleFactor),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -36,20 +44,26 @@ class HeaderSection extends StatelessWidget {
                   eventTitle,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 18,
+                    fontSize: 18 * scaleFactor,
                   ),
                 ),
-                SizedBox(height: 4),
+                SizedBox(height: 4 * scaleFactor),
                 Row(
                   children: [
                     Text(
                       eventOwnerName,
-                      style: TextStyle(color: Colors.grey[600], fontSize: 14),
+                      style: TextStyle(
+                        color: Colors.grey[600],
+                        fontSize: 14 * scaleFactor,
+                      ),
                     ),
-                    SizedBox(width: 5),
+                    SizedBox(width: 5 * scaleFactor),
                     Text(
                       eventOwnerEmail,
-                      style: TextStyle(color: Colors.grey[600], fontSize: 14),
+                      style: TextStyle(
+                        color: Colors.grey[600],
+                        fontSize: 14 * scaleFactor,
+                      ),
                     ),
                   ],
                 ),
@@ -57,7 +71,7 @@ class HeaderSection extends StatelessWidget {
             ),
           ],
         ),
-        Icon(Icons.more_vert, color: Colors.grey[600]),
+        Icon(Icons.more_vert, color: Colors.grey[600], size: 24 * scaleFactor),
       ],
     );
   }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grow_together/widgets/pay_confirmation_popup.dart';
 
-
 class ActionButtonsSection extends StatefulWidget {
   final String eventName;
 
@@ -20,6 +19,10 @@ class _ActionButtonsSectionState extends State<ActionButtonsSection> {
 
   @override
   Widget build(BuildContext context) {
+    // Calculate scaling factor based on screen width
+    double screenWidth = MediaQuery.of(context).size.width;
+    double scaleFactor = (screenWidth / 375.0).clamp(1.0, 1.5);
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -30,7 +33,10 @@ class _ActionButtonsSectionState extends State<ActionButtonsSection> {
           style: TextButton.styleFrom(
             foregroundColor: Colors.grey[700],
           ),
-          child: const Text('Cancel'),
+          child: Text(
+            'Cancel',
+            style: TextStyle(fontSize: 14 * scaleFactor),
+          ),
         ),
         ElevatedButton(
           onPressed: () async {
@@ -40,7 +46,10 @@ class _ActionButtonsSectionState extends State<ActionButtonsSection> {
             foregroundColor: Colors.white,
             backgroundColor: Colors.purple,
           ),
-          child: const Text('Grow!'),
+          child: Text(
+            'Grow!',
+            style: TextStyle(fontSize: 14 * scaleFactor),
+          ),
         ),
       ],
     );
@@ -53,10 +62,13 @@ class _ActionButtonsSectionState extends State<ActionButtonsSection> {
         return Dialog(
           backgroundColor: Colors.transparent,
           insetPadding: EdgeInsets.zero,
-          child: PayConfirmationPopUp(formKey: _formKey, controller: _controller, eventName: eventName),
+          child: PayConfirmationPopUp(
+            formKey: _formKey,
+            controller: _controller,
+            eventName: eventName,
+          ),
         );
       },
     );
   }
 }
-

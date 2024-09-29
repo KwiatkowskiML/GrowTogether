@@ -31,7 +31,6 @@ class _MapScreenState extends State<MapScreen> {
           _showCustomPopup(event);
         },
       );
-
       _markers.add(marker);
     }
   }
@@ -81,7 +80,7 @@ class _MapScreenState extends State<MapScreen> {
               final screenWidth = mediaQuery.size.width;
               final screenHeight = mediaQuery.size.height;
 
-              bool isSmall = screenWidth < 1200;
+              bool isSmall = true;
 
               double maxWidth = screenWidth * 2.3 / 3;
               double maxHeight = screenHeight * 2.3 / 3;

@@ -30,14 +30,18 @@ class EventPopupCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Calculate scaling factor based on screen width
+    double screenWidth = MediaQuery.of(context).size.width;
+    double scaleFactor = (screenWidth / 375.0).clamp(1.0, 1.5);
+
     return Card(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
+        borderRadius: BorderRadius.circular(10.0 * scaleFactor),
       ),
       elevation: 5,
-      margin: EdgeInsets.all(16.0),
+      margin: EdgeInsets.all(16.0 * scaleFactor),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(16.0 * scaleFactor),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -47,20 +51,23 @@ class EventPopupCard extends StatelessWidget {
               eventOwnerName: eventOwnerName,
               eventOwnerEmail: eventOwnerEmail,
             ),
-            SizedBox(height: 16),
+            SizedBox(height: 16 * scaleFactor),
             Text(
               eventDescription,
-              style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+              style: TextStyle(
+                fontSize: 14 * scaleFactor,
+                color: Colors.grey[700],
+              ),
             ),
-            SizedBox(height: 16),
+            SizedBox(height: 16 * scaleFactor),
             GoalProgressSection(
               assembledAmount: assembledAmount,
               totalGoalAmount: totalGoalAmount,
               growersCount: growersCount,
             ),
-            SizedBox(height: 16),
+            SizedBox(height: 16 * scaleFactor),
             BenefitsSection(benefitsText: benefitsText),
-            SizedBox(height: 16),
+            SizedBox(height: 16 * scaleFactor),
             Expanded(child: Container()),
             ActionButtonsSection(eventName: eventTitle),
           ],
