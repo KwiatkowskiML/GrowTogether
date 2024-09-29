@@ -88,8 +88,10 @@ class _AuthFormState extends State<AuthForm> {
                   _formKey.currentState!.save();
 
                   try {
+                    widget.isLogin ? await UserSingleton()
+                        .login_user(email: _email, password: _password) :
                     await UserSingleton()
-                        .login_user(email: _email, password: _password);
+                        .register_user(email: _email, password: _password);
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
