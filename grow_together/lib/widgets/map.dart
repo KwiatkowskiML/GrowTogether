@@ -130,6 +130,23 @@ class _MapScreenState extends State<MapScreen> {
         onCameraIdle: () {
           _getVisibleRegion();
         },
+        onLongPress: (LatLng latLng) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => EventCreationForm(
+                eventLat: latLng.latitude,
+                eventLon: latLng.longitude,
+                eventOwnerId: null,
+              ),
+            ),
+          ).then((value) {
+            setState(() {
+              _markers.clear();
+              _setMarkers();
+            });
+          });
+        },
         initialCameraPosition: const CameraPosition(
           target: LatLng(50.049683, 19.944544),
           zoom: 14,
