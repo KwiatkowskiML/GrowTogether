@@ -3,10 +3,12 @@ import 'package:grow_together/widgets/pay_confirmation_popup.dart';
 
 class ActionButtonsSection extends StatefulWidget {
   final String eventName;
+  final Function? payCallback;
 
   ActionButtonsSection({
     Key? key,
     required this.eventName,
+    this.payCallback,
   }) : super(key: key);
 
   @override
@@ -39,7 +41,7 @@ class _ActionButtonsSectionState extends State<ActionButtonsSection> {
         ),
         ElevatedButton(
           onPressed: () async {
-            _showPayPopUp(context, widget.eventName);
+            _showPayPopUp(context, widget.eventName, widget.payCallback);
           },
           style: ElevatedButton.styleFrom(
             foregroundColor: Colors.white,
@@ -54,7 +56,8 @@ class _ActionButtonsSectionState extends State<ActionButtonsSection> {
     );
   }
 
-  Future<void> _showPayPopUp(BuildContext context, String eventName) async {
+  Future<void> _showPayPopUp(
+      BuildContext context, String eventName, Function? payCallback) async {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -62,6 +65,7 @@ class _ActionButtonsSectionState extends State<ActionButtonsSection> {
           backgroundColor: Colors.transparent,
           insetPadding: EdgeInsets.zero,
           child: PayConfirmationPopUp(
+            onPay: payCallback,
             formKey: _formKey,
             controller: _controller,
             eventName: eventName,

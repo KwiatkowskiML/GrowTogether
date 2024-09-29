@@ -4,12 +4,10 @@ import 'package:email_validator/email_validator.dart';
 import '../user.dart';
 
 class AuthForm extends StatefulWidget {
-  final bool isLogin;
   final VoidCallback onAuthSuccess;
 
   const AuthForm({
     Key? key,
-    required this.isLogin,
     required this.onAuthSuccess,
   }) : super(key: key);
 
@@ -22,6 +20,7 @@ class _AuthFormState extends State<AuthForm> {
   String _email = '';
   String _password = '';
   String _confirmPassword = '';
+  bool _isLogin = true; // Moved isLogin to state
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +62,7 @@ class _AuthFormState extends State<AuthForm> {
               });
             },
           ),
-          if (!widget.isLogin)
+          if (!_isLogin)
             TextFormField(
               decoration: const InputDecoration(labelText: 'Confirm Password'),
               obscureText: true,
@@ -83,16 +82,18 @@ class _AuthFormState extends State<AuthForm> {
           Padding(
             padding: const EdgeInsets.only(top: 20.0, bottom: 10.0),
             child: ElevatedButton(
-              child: Text(widget.isLogin ? 'Login' : 'Register'),
+              child: Text(_isLogin ? 'Login' : 'Register'),
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
 
                   try {
-                    if (widget.isLogin) {
-                      await UserSingleton().login_user(email: _email, password: _password);
+                    if (_isLogin) {
+                      await UserSingleton()
+                          .login_user(email: _email, password: _password);
                     } else {
-                      await UserSingleton().register_user(email: _email, password: _password);
+                      await UserSingleton()
+                          .register_user(email: _email, password: _password);
                     }
                     widget.onAuthSuccess(); // Call the onAuthSuccess callback
                     Navigator.of(context).pop();
@@ -109,39 +110,17 @@ class _AuthFormState extends State<AuthForm> {
             ),
           ),
           TextButton(
-            child: Text(widget.isLogin
+            child: Text(_isLogin
                 ? 'Create an account'
                 : 'Already have an account? Login'),
             onPressed: () {
-              Navigator.of(context).pop();
-              _showAuthModal(context, isLogin: !widget.isLogin);
+              setState(() {
+                _isLogin = !_isLogin;
+              });
             },
           ),
         ],
       ),
-    );
-  }
-
-  void _showAuthModal(BuildContext context, {required bool isLogin}) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(isLogin ? 'Login' : 'Register'),
-          content: AuthForm(
-            isLogin: isLogin,
-            onAuthSuccess: widget.onAuthSuccess,
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
     );
   }
 }

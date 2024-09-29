@@ -7,12 +7,14 @@ class EventCreationForm extends StatefulWidget {
   final int? eventOwnerId;
   final double eventLat;
   final double eventLon;
+  final VoidCallback? onEventCreated;
 
   const EventCreationForm({
     super.key,
     required this.eventOwnerId,
     required this.eventLat,
     required this.eventLon,
+    this.onEventCreated,
   });
 
   @override
@@ -72,9 +74,14 @@ class _EventCreationFormState extends State<EventCreationForm> {
     }
   }
 
-  // Dummy function to handle form data submission
   void _sendData(Event formData) async {
     await ApiCalls.deployEvent(formData);
+
+    // Call the onEventCreated callback
+    if (widget.onEventCreated != null) {
+      widget.onEventCreated!();
+    }
+
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (context) => SuccessScreen(),

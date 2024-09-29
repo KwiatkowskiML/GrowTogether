@@ -6,12 +6,16 @@ import 'package:grow_together/models/event_pay.dart';
 import '../user.dart';
 
 class PayConfirmationPopUp extends StatelessWidget {
+  final Function? onPay;
   const PayConfirmationPopUp({
     super.key,
+    this.onPay,
     required GlobalKey<FormState> formKey,
     required TextEditingController controller,
-    required String eventName
-  }) : _formKey = formKey, _controller = controller, _eventName = eventName;
+    required String eventName,
+  })  : _formKey = formKey,
+        _controller = controller,
+        _eventName = eventName;
 
   final GlobalKey<FormState> _formKey;
   final TextEditingController _controller;
@@ -32,11 +36,9 @@ class PayConfirmationPopUp extends StatelessWidget {
               children: [
                 TextFormField(
                   controller: _controller,
-                  keyboardType:
-                      TextInputType.numberWithOptions(decimal: true),
+                  keyboardType: TextInputType.numberWithOptions(decimal: true),
                   inputFormatters: [
-                    FilteringTextInputFormatter.allow(
-                        RegExp(r'^\d*\.?\d*$')),
+                    FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*$')),
                   ],
                   decoration: InputDecoration(
                     labelText: 'Enter the amount you want to pay:',
@@ -66,23 +68,21 @@ class PayConfirmationPopUp extends StatelessWidget {
                         if (_formKey.currentState!.validate()) {
                           double amount = double.parse(_controller.text);
                           var eventPay = EventPay(
-                              eventName: _eventName, eventAmount: amount, userId: UserSingleton().token!);
+                              eventName: _eventName,
+                              eventAmount: amount,
+                              userId: UserSingleton().token!);
                           try {
                             await ApiCalls.payEvent(eventPay);
-                            Navigator.of(context)
-                                .pop(); 
-                            Navigator.of(context)
-                                .pop(); 
+                            if (onPay != null) onPay!();
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pop();
                           } catch (e) {
                             print(e);
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                  content: Text('Error occurred: $e')),
+                              SnackBar(content: Text('Error occurred: $e')),
                             );
-                            Navigator.of(context)
-                                .pop(); 
-                            Navigator.of(context)
-                                .pop(); 
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pop();
                           }
                         }
                       },

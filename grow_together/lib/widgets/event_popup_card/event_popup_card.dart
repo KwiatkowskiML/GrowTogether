@@ -14,6 +14,7 @@ class EventPopupCard extends StatelessWidget {
   final double totalGoalAmount;
   final int growersCount;
   final String benefitsText;
+  final Function? payCallback;
 
   const EventPopupCard({
     super.key,
@@ -26,6 +27,7 @@ class EventPopupCard extends StatelessWidget {
     required this.totalGoalAmount,
     required this.growersCount,
     required this.benefitsText,
+    this.payCallback,
   });
 
   @override
@@ -68,7 +70,8 @@ class EventPopupCard extends StatelessWidget {
             BenefitsSection(benefitsText: benefitsText),
             SizedBox(height: 16 * scaleFactor),
             Expanded(child: Container()),
-            ActionButtonsSection(eventName: eventTitle),
+            ActionButtonsSection(
+                eventName: eventTitle, payCallback: payCallback),
           ],
         ),
       ),

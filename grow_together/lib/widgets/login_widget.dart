@@ -36,7 +36,6 @@ class _LoginWidgetState extends State<LoginWidget> {
         return AlertDialog(
           title: Text(isLogin ? 'Login' : 'Register'),
           content: AuthForm(
-            isLogin: isLogin,
             onAuthSuccess: () {
               setState(() {
                 isLogged = true;

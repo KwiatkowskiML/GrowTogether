@@ -24,15 +24,14 @@ class MapScreenState extends State<MapScreen> {
     setState(() {
       lat = newLat;
       lon = newLon;
-      if (_controller != null){
-
-          _controller!.animateCamera(CameraUpdate.newLatLngZoom(LatLng(lat, lon), 14));
-
+      if (_controller != null) {
+        _controller!
+            .animateCamera(CameraUpdate.newLatLngZoom(LatLng(lat, lon), 14));
       }
     });
   }
 
-  void showPopUp(event){
+  void showPopUp(event) {
     setState(() {
       _showCustomPopup(event);
     });
@@ -51,7 +50,17 @@ class MapScreenState extends State<MapScreen> {
         markerId: MarkerId(event.eventTitle),
         position: LatLng(event.eventLat, event.eventLon),
         onTap: () {
-          _showCustomPopup(event);
+          setState(() {
+            _markers.clear();
+            _setMarkers();
+          });
+          _showCustomPopup(
+            event,
+            setState: () {
+              _markers.clear();
+              _setMarkers();
+            },
+          );
         },
       );
       _markers.add(marker);
@@ -91,7 +100,7 @@ class MapScreenState extends State<MapScreen> {
         position.longitude <= bounds.northeast.longitude;
   }
 
-  void _showCustomPopup(event) {
+  void _showCustomPopup(event, {Function? setState}) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -126,6 +135,7 @@ class MapScreenState extends State<MapScreen> {
                     totalGoalAmount: event.eventGoal,
                     growersCount: event.eventContributionsNumber,
                     benefitsText: event.eventBenefitDesc,
+                    payCallback: setState,
                   ),
                 ),
               );
@@ -144,9 +154,6 @@ class MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print("building");
-    print(lat);
-    print(lon);
     return Scaffold(
       body: GoogleMap(
         onMapCreated: (GoogleMapController controller) {
@@ -165,22 +172,22 @@ class MapScreenState extends State<MapScreen> {
             );
             return;
           }
-
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => EventCreationForm(
                 eventLat: latLng.latitude,
                 eventLon: latLng.longitude,
-                eventOwnerId: null,
+                eventOwnerId: 1,
+                onEventCreated: () {
+                  setState(() {
+                    _markers.clear();
+                    _setMarkers();
+                  });
+                },
               ),
             ),
-          ).then((value) {
-            setState(() {
-              _markers.clear();
-              _setMarkers();
-            });
-          });
+          );
         },
         initialCameraPosition: CameraPosition(
           target: LatLng(lat, lon),
