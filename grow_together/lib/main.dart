@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:grow_together/widgets/floating_search_bar.dart';
 import 'package:grow_together/widgets/login_widget.dart';
 import 'package:grow_together/widgets/map.dart';
+import 'package:grow_together/widgets/side_bar.dart';
 
 import 'widgets/auth_widget.dart';
 
