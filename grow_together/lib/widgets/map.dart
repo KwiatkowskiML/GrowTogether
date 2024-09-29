@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:grow_together/events/eventsList.dart';
+import 'package:grow_together/user.dart';
 import 'package:grow_together/widgets/event_creation_form/event_creation_form.dart';
 import 'package:grow_together/widgets/event_popup_card/event_popup_card.dart';
 import 'package:grow_together/widgets/greek_vine_border_card.dart';
@@ -130,6 +131,15 @@ class _MapScreenState extends State<MapScreen> {
           _getVisibleRegion();
         },
         onLongPress: (LatLng latLng) {
+          if (!UserSingleton().isLogged()) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('You need to be logged in to create an event'),
+              ),
+            );
+            return;
+          }
+
           Navigator.push(
             context,
             MaterialPageRoute(
