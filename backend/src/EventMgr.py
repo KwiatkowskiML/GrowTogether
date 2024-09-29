@@ -1,7 +1,7 @@
-import os
-
 from pydantic import BaseModel
 
+from .Components import Components
+from .Helpers import save_to_db, load_from_db
 from .Logger import Logger, LogLevel
 from .ModelObject import ModelObject
 from .Models import EventModel, EventPay
@@ -28,8 +28,12 @@ class EventMgr(ModelObject):
     def __init__(self) -> None:
         super().__init__()
 
-        self._events = {}
-        self._load_events_from_db()
+        loaded = load_from_db(DB_PATH, DB_PATH_TMP, EventMgrModel)
+
+        if loaded is None:
+            self._events = {}
+        else:
+            self._events = loaded.events
 
         Logger().log_info("EventMgr created", LogLevel.LOW_FREQ)
 
@@ -46,7 +50,7 @@ class EventMgr(ModelObject):
                 raise ValueError(f"Event with title '{event.eventTitle}' already exists")
 
             self._events[event.eventTitle] = event
-            self._save_events_to_db_unlocked()
+            save_to_db(DB_PATH, DB_PATH_TMP, EventMgrModel(events=self._events).model_dump_json(indent=2))
         Logger().log_info(f"Event '{event.eventTitle}' added: {event.model_dump_json()}", LogLevel.LOW_FREQ)
 
     def get_all_events(self) -> list[EventModel]:
@@ -62,52 +66,21 @@ class EventMgr(ModelObject):
             if pay.eventName not in self._events:
                 raise ValueError(f"Event with title '{pay.eventName}' not found")
 
+            Components().get_user_mgr().add_user_pay(pay.userId, pay)
+
             self._events[pay.eventName].eventCurrentMoney += pay.eventAmount
             self._events[pay.eventName].eventContributionsNumber += 1
-            self._save_events_to_db_unlocked()
+
+            save_to_db(DB_PATH, DB_PATH_TMP, EventMgrModel(events=self._events).model_dump_json(indent=2))
 
         Logger().log_info("Event correctly paid", LogLevel.LOW_FREQ)
+
+    def get_event(self, name: str) -> EventModel | None:
+        with self.get_lock():
+            if name not in self._events:
+                return None
+            return self._events[name]
 
     # ------------------------------
     # Private methods
     # ------------------------------
-
-    def _save_events_to_db_unlocked(self) -> None:
-        Logger().log_info("Saving events to DB", LogLevel.LOW_FREQ)
-
-        # if db file exists - move it to backup
-        if os.path.exists(DB_PATH):
-            if os.path.exists(DB_PATH_TMP):
-                os.remove(DB_PATH_TMP)
-            os.rename(DB_PATH, DB_PATH_TMP)
-
-        with open(DB_PATH, "w") as f:
-            f.write(EventMgrModel(events=self._events).model_dump_json(indent=2))
-
-        Logger().log_info(f"Saved {len(self._events)} events to db", LogLevel.LOW_FREQ)
-
-    def _load_events_from_db(self) -> None:
-        Logger().log_info("Loading events from DB", LogLevel.LOW_FREQ)
-
-        with self.get_lock():
-            try:
-                if os.path.exists(DB_PATH):
-                    with open(DB_PATH, "r") as f:
-                        self._events = EventMgrModel.model_validate_json(f.read()).events
-                        Logger().log_info(f"Loaded {len(self._events)} events from db", LogLevel.LOW_FREQ)
-                        return
-            except Exception as e:
-                Logger().log_error(f"Failed to load events from DB: {e}", LogLevel.LOW_FREQ)
-
-            # Try to load from backup
-            Logger().log_error("Loading from backup", LogLevel.LOW_FREQ)
-            try:
-                if os.path.exists(DB_PATH_TMP):
-                    with open(DB_PATH_TMP, "r") as f:
-                        self._events = EventMgrModel.model_validate_json(f.read()).events
-                        Logger().log_info(f"Loaded {len(self._events)} events from backup", LogLevel.LOW_FREQ)
-                        return
-            except Exception as e:
-                Logger().log_error(f"Failed to load events from backup: {e}", LogLevel.LOW_FREQ)
-
-            self._events = {}
