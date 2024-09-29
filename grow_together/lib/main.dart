@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:grow_together/widgets/add_event_button.dart';
 import 'package:grow_together/widgets/floating_search_bar.dart';
+import 'package:grow_together/widgets/login_widget.dart';
 import 'package:grow_together/widgets/map.dart';
 
+import 'widgets/auth_widget.dart';
+
 void main() {
-  // runApp(GrowTogetherApp());
   runApp(const GrowTogetherApp());
 }
 
@@ -14,7 +16,7 @@ class GrowTogetherApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Google Maps App',
+      title: 'Grow Together app',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -30,7 +32,13 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Grow Together'),
+        title: const Text('Grow Together app'),
+        actions: [
+          Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: LoginWidget()
+          ),
+        ],
       ),
       body: Stack(
         children: <Widget>[MapScreen(), FloatingSearchBar(), AddEventButton()],
