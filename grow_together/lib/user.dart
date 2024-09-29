@@ -1,3 +1,6 @@
+import 'package:grow_together/conn/api_calls.dart';
+import 'package:grow_together/models/user_login.dart';
+
 class UserSingleton {
   static final UserSingleton _instance = UserSingleton._internal();
 
@@ -8,21 +11,28 @@ class UserSingleton {
   }
 
   String? _email;
-  String? _token;
+  int? _token;
 
   String? get email => _email;
 
-  String? get token => _token;
+  int? get token => _token;
 
   Future<void> login_user(
       {required String email, required String password}) async {
-    print('Email: $email, Password: $password');
-    throw Exception('Login failed');
+    int id = await ApiCalls.LoginUser(
+        UserLogin(userMail: email, userPassword: password));
+
+    _email = email;
+    _token = id;
   }
 
   Future<void> register_user(
       {required String email, required String password}) async {
-    print("Email: $email, Password: $password");
+    int id = await ApiCalls.RegisterUser(
+        UserLogin(userMail: email, userPassword: password));
+
+    _email = email;
+    _token = id;
   }
 
   void logout() {
