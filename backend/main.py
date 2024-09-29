@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from src.Components import Components
 from src.Models import EventModel, CommandResponse, AllEventsResponse, EventPay, UserLoginResponse, \
-    UserLogin, UserEventsResponse, UserRequest
+    UserLogin, UserEventsResponse, UserRequest, UserEventPaysResponse
 
 
 def startup():
@@ -73,7 +73,7 @@ async def register_user(model: UserLogin) -> UserLoginResponse:
         return UserLoginResponse(result=f"{e}", userId=-1)
 
 
-@app.get("/users/login")
+@app.post("/users/login")
 async def login_user(model: UserLogin) -> UserLoginResponse:
     try:
         ident = Components().get_user_mgr().login_user(model)
@@ -82,7 +82,7 @@ async def login_user(model: UserLogin) -> UserLoginResponse:
         return UserLoginResponse(result=f"{e}", userId=-1)
 
 
-@app.get("/users/get_events")
+@app.post("/users/get_events")
 async def get_user_events(model: UserRequest) -> UserEventsResponse:
     try:
         events = Components().get_user_mgr().get_user_events(model.userId)
@@ -91,13 +91,13 @@ async def get_user_events(model: UserRequest) -> UserEventsResponse:
         return UserEventsResponse(result=f"{e}", userEvents=[])
 
 
-@app.get("/users/get_pays")
-async def get_user_pays(model: UserRequest) -> UserEventsResponse:
+@app.post("/users/get_pays")
+async def get_user_pays(model: UserRequest) -> UserEventPaysResponse:
     try:
         pays = Components().get_user_mgr().get_user_pays(model.userId)
-        return UserEventsResponse(result="SUCCESS", userEvents=pays)
+        return UserEventPaysResponse(result="SUCCESS", userEventPays=pays)
     except Exception as e:
-        return UserEventsResponse(result=f"{e}", userEvents=[])
+        return UserEventPaysResponse(result=f"{e}", userEventPays=[])
 
 
 if __name__ == '__main__':

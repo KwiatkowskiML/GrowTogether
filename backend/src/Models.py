@@ -36,7 +36,7 @@ class AllEventsResponse(BaseModel):
 
 
 class UserModel(BaseModel):
-    userMail: str
+    userMail: EmailStr
     userPassword: str
     userId: int
     userEventPays: list[EventPay]
@@ -44,7 +44,7 @@ class UserModel(BaseModel):
 
 
 class UserLogin(BaseModel):
-    userMail: str
+    userMail: EmailStr
     userPassword: str
 
 

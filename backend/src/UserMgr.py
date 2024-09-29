@@ -37,6 +37,7 @@ class UserMgr(ModelObject):
             self._users = {}
         else:
             self._users = loaded.users
+        self._users_id = {}
 
         for user in self._users.values():
             self._users_id[user.userId] = user

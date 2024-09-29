@@ -6,3 +6,5 @@ __pycache__/
 events.db
 log.txt
 events.db.tmp
+users.db
+users.db.tmp
