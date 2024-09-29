@@ -27,7 +27,7 @@ class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
   final GlobalKey<MapScreenState> _key = GlobalKey();
 
-  List<Widget> _buildSearchSuggestions(String query) {
+  List<Widget> _buildSearchSuggestions(String query, SearchController controller) {
     if (query.isEmpty) return [];
 
     final lowercaseQuery = query.toLowerCase();
@@ -44,7 +44,9 @@ class HomeScreen extends StatelessWidget {
       onTap: () {
         print('Selected event: ${event.eventTitle}');
         _key.currentState?.updatePosition(event.eventLat, event.eventLon);
-
+        
+        // Close the suggestions view
+        controller.closeView(event.eventTitle);  // Pass the selected item
       },
     )).toList();
   }
@@ -71,7 +73,7 @@ class HomeScreen extends StatelessWidget {
             child: SearchAnchor.bar(
               barHintText: 'Search events...',
               suggestionsBuilder: (BuildContext context, SearchController controller) {
-                return _buildSearchSuggestions(controller.text);
+                return _buildSearchSuggestions(controller.text, controller);
               },
             ),
           ),
