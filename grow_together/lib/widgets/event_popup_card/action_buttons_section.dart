@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ActionButtonsSection extends StatelessWidget {
-  const ActionButtonsSection({Key? key}) : super(key: key);
+  const ActionButtonsSection({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -12,20 +12,20 @@ class ActionButtonsSection extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: Text('Cancel'),
           style: TextButton.styleFrom(
             foregroundColor: Colors.grey[700],
           ),
+          child: Text('Cancel'),
         ),
         ElevatedButton(
           onPressed: () {
             // Handle Grow! button action
           },
-          child: Text('Grow!'),
           style: ElevatedButton.styleFrom(
             foregroundColor: Colors.white,
             backgroundColor: Colors.purple,
           ),
+          child: Text('Grow!'),
         ),
       ],
     );

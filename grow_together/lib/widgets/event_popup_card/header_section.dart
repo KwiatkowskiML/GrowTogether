@@ -7,12 +7,12 @@ class HeaderSection extends StatelessWidget {
   final String eventOwnerEmail;
 
   const HeaderSection({
-    Key? key,
+    super.key,
     required this.avatarInitial,
     required this.eventTitle,
     required this.eventOwnerName,
     required this.eventOwnerEmail,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

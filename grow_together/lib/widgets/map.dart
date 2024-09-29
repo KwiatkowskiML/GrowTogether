@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:grow_together/events/eventsList.dart';
+import 'package:grow_together/widgets/event_creation_form/event_creation_form.dart';
 import 'package:grow_together/widgets/event_popup_card/event_popup_card.dart';
+import 'package:grow_together/widgets/greek_vine_border_card.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -25,10 +27,6 @@ class _MapScreenState extends State<MapScreen> {
       var marker = Marker(
         markerId: MarkerId(event.eventTitle),
         position: LatLng(event.eventLat, event.eventLon),
-        // infoWindow: InfoWindow(
-        //   title: event.eventTitle,
-        //   snippet: event.eventDesc,
-        // ),
         onTap: () {
           _showCustomPopup(event);
         },
@@ -46,19 +44,44 @@ class _MapScreenState extends State<MapScreen> {
         return Dialog(
           backgroundColor: Colors.transparent,
           insetPadding: EdgeInsets.zero,
-          child: Container(
-            width: MediaQuery.of(context).size.width / 3,
-            height: MediaQuery.of(context).size.height / 2,
-            child: EventPopupCard(
-                avatarInitial: event.eventOwnerName[0],
-                eventTitle: event.eventTitle,
-                eventOwnerName: event.eventOwnerName,
-                eventOwnerEmail: event.eventOwnerContactMail,
-                eventDescription: event.eventDesc,
-                assembledAmount: event.eventCurrentMoney,
-                totalGoalAmount: event.eventGoal,
-                growersCount: event.eventContributorsNumber,
-                benefitsText: event.eventBenefitDesc),
+          child: LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+              final mediaQuery = MediaQuery.of(context);
+              final screenWidth = mediaQuery.size.width;
+              final screenHeight = mediaQuery.size.height;
+
+              bool isSmall = screenWidth < 1000;
+
+              double maxWidth = screenWidth * 2.3 / 3;
+              double maxHeight = screenHeight * 2.3 / 3;
+
+              Widget content = ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxWidth: maxWidth,
+                  maxHeight: maxHeight,
+                ),
+                child: AspectRatio(
+                  aspectRatio: 3 / 2,
+                  child: EventPopupCard(
+                    avatarInitial: event.eventOwnerName[0],
+                    eventTitle: event.eventTitle,
+                    eventOwnerName: event.eventOwnerName,
+                    eventOwnerEmail: event.eventOwnerContactMail,
+                    eventDescription: event.eventDesc,
+                    assembledAmount: event.eventCurrentMoney,
+                    totalGoalAmount: event.eventGoal,
+                    growersCount: event.eventContributorsNumber,
+                    benefitsText: event.eventBenefitDesc,
+                  ),
+                ),
+              );
+
+              if (isSmall) {
+                return GreekVineBorderCard(body: content);
+              } else {
+                return content;
+              }
+            },
           ),
         );
       },
@@ -77,6 +100,23 @@ class _MapScreenState extends State<MapScreen> {
           zoom: 14,
         ),
         markers: _markers,
+        onLongPress: (LatLng latLng) {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => Scaffold(
+                        body: EventCreationForm(
+                          eventLat: latLng.latitude,
+                          eventLon: latLng.longitude,
+                          eventOwnerId: 1, // TODO: Replace with actual user ID
+                        ),
+                      ))).then((value) {
+            setState(() {
+              _markers.clear();
+              _setMarkers();
+            });
+          });
+        },
       ),
     );
   }

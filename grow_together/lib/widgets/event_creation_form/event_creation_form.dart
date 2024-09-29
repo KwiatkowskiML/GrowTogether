@@ -1,33 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:grow_together/events/eventsList.dart';
 import 'package:intl/intl.dart';
-import 'package:grow_together/models/fundraising_event.dart';
+import 'package:grow_together/models/event.dart';
 
-class FundraisingEventForm extends StatefulWidget {
-  final String eventOwnerId;
+class EventCreationForm extends StatefulWidget {
+  final int? eventOwnerId; // Changed to int? for optional owner ID
   final double eventLat;
   final double eventLon;
 
-  FundraisingEventForm({
+  const EventCreationForm({
+    super.key,
     required this.eventOwnerId,
     required this.eventLat,
     required this.eventLon,
   });
 
   @override
-  _FundraisingEventFormState createState() => _FundraisingEventFormState();
+  _EventCreationFormState createState() => _EventCreationFormState();
 }
 
-class _FundraisingEventFormState extends State<FundraisingEventForm> {
+class _EventCreationFormState extends State<EventCreationForm> {
   final _formKey = GlobalKey<FormState>();
 
   // Controllers for each field
-  TextEditingController _eventTitleController = TextEditingController();
-  TextEditingController _eventOwnerNameController = TextEditingController();
-  TextEditingController _eventGoalController = TextEditingController();
-  TextEditingController _eventDescController = TextEditingController();
-  TextEditingController _eventOwnerContactMailController =
+  final TextEditingController _eventTitleController = TextEditingController();
+  final TextEditingController _eventOwnerNameController =
       TextEditingController();
-  TextEditingController _eventBenefitDescController = TextEditingController();
+  final TextEditingController _eventGoalController = TextEditingController();
+  final TextEditingController _eventCurrentMoneyController =
+      TextEditingController(); // New field for current money
+  final TextEditingController _eventContributorsNumberController =
+      TextEditingController(); // New field for number of contributors
+  final TextEditingController _eventDescController = TextEditingController();
+  final TextEditingController _eventOwnerContactMailController =
+      TextEditingController();
+  final TextEditingController _eventBenefitDescController =
+      TextEditingController();
 
   DateTime? _eventStartDate;
   DateTime? _eventEndDate;
@@ -49,17 +57,22 @@ class _FundraisingEventFormState extends State<FundraisingEventForm> {
   // Function to handle form submission
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
-      // Create a new instance of the model with the gathered data
-      FundraisingEvent formData = FundraisingEvent(
+      // Create a new instance of the Event model with the gathered data
+      Event formData = Event(
         eventTitle: _eventTitleController.text,
         eventOwnerName: _eventOwnerNameController.text,
-        eventOwnerId: widget.eventOwnerId,
-        eventGoal: _eventGoalController.text,
+        eventOwnerId: widget.eventOwnerId, // Nullable owner ID
+        eventGoal: double.tryParse(_eventGoalController.text) ?? 0.0,
+        eventCurrentMoney: double.tryParse(_eventCurrentMoneyController.text) ??
+            0.0, // New field
+        eventContributorsNumber:
+            int.tryParse(_eventContributorsNumberController.text) ??
+                0, // New field
         eventLat: widget.eventLat,
         eventLon: widget.eventLon,
         eventDesc: _eventDescController.text,
-        eventStartDate: _eventStartDate,
-        eventEndDate: _eventEndDate,
+        eventStartDate: _eventStartDate ?? DateTime.now(),
+        eventEndDate: _eventEndDate ?? DateTime.now(),
         eventOwnerContactMail: _eventOwnerContactMailController.text,
         eventBenefitDesc: _eventBenefitDescController.text,
       );
@@ -70,9 +83,14 @@ class _FundraisingEventFormState extends State<FundraisingEventForm> {
   }
 
   // Dummy function to handle form data submission
-  void _sendData(FundraisingEvent formData) {
-    print('Form submitted with the following data:');
-    print(formData.toString());
+  void _sendData(Event formData) {
+    eventsList.add(formData);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Event created successfully!'),
+      ),
+    );
+    Navigator.of(context).pop();
   }
 
   @override
@@ -112,11 +130,35 @@ class _FundraisingEventFormState extends State<FundraisingEventForm> {
                 TextFormField(
                   controller: _eventGoalController,
                   decoration: InputDecoration(
-                      labelText:
-                          'Event Goal (e.g. Raise funds for new equipment)'),
+                      labelText: 'Event Goal (e.g., amount to be raised)'),
+                  keyboardType: TextInputType.number,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please describe the event goal';
+                      return 'Please enter a valid event goal';
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: _eventCurrentMoneyController,
+                  decoration:
+                      InputDecoration(labelText: 'Current Money Raised'),
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter the current money raised';
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: _eventContributorsNumberController,
+                  decoration:
+                      InputDecoration(labelText: 'Number of Contributors'),
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter the number of contributors';
                     }
                     return null;
                   },
@@ -169,7 +211,7 @@ class _FundraisingEventFormState extends State<FundraisingEventForm> {
                   controller: _eventBenefitDescController,
                   decoration: InputDecoration(
                       labelText:
-                          'Benefit Description (e.g., discounts on services as rewards)'),
+                          'Benefit Description (e.g., rewards for supporters)'),
                   maxLines: 3,
                   validator: (value) {
                     if (value == null || value.isEmpty) {

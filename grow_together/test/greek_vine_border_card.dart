@@ -7,6 +7,8 @@ void main() {
 }
 
 class StandaloneTestApp extends StatelessWidget {
+  const StandaloneTestApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -27,8 +29,8 @@ class StandaloneTestApp extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15.0),
                   ),
-                  child: const Text('Hello, World!'),
                   elevation: 5,
+                  child: const Text('Hello, World!'),
                 ),
               ),
               ElevatedButton(

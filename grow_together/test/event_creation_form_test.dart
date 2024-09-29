@@ -8,6 +8,8 @@ void main() {
 }
 
 class StandaloneTestApp extends StatelessWidget {
+  const StandaloneTestApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -21,8 +23,8 @@ class StandaloneTestApp extends StatelessWidget {
           child: Column(
             children: [
               Expanded(
-                child: FundraisingEventForm(
-                  eventOwnerId: '12345',
+                child: EventCreationForm(
+                  eventOwnerId: 1,
                   eventLat: 52.2297,
                   eventLon: 21.0122,
                 ),

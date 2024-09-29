@@ -4,7 +4,6 @@ class AddEventButton extends StatelessWidget {
   const AddEventButton({
     super.key,
   });
-  
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +14,7 @@ class AddEventButton extends StatelessWidget {
       child: Container(
         child: Row(
           children: [
-            Container(
+            SizedBox(
                 width: 150,
                 height: 70,
                 child: ElevatedButton(

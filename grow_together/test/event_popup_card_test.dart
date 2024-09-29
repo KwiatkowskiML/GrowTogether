@@ -8,6 +8,8 @@ void main() {
 }
 
 class StandaloneTestApp extends StatelessWidget {
+  const StandaloneTestApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

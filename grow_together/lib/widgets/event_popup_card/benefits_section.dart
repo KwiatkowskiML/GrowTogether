@@ -4,9 +4,9 @@ class BenefitsSection extends StatelessWidget {
   final String benefitsText;
 
   const BenefitsSection({
-    Key? key,
+    super.key,
     required this.benefitsText,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

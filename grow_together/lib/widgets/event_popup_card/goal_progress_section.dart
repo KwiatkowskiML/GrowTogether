@@ -6,11 +6,11 @@ class GoalProgressSection extends StatelessWidget {
   final int growersCount;
 
   const GoalProgressSection({
-    Key? key,
+    super.key,
     required this.assembledAmount,
     required this.totalGoalAmount,
     required this.growersCount,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

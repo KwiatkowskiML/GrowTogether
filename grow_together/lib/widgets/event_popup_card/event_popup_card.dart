@@ -16,7 +16,7 @@ class EventPopupCard extends StatelessWidget {
   final String benefitsText;
 
   const EventPopupCard({
-    Key? key,
+    super.key,
     required this.avatarInitial,
     required this.eventTitle,
     required this.eventOwnerName,
@@ -26,7 +26,7 @@ class EventPopupCard extends StatelessWidget {
     required this.totalGoalAmount,
     required this.growersCount,
     required this.benefitsText,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -61,6 +61,7 @@ class EventPopupCard extends StatelessWidget {
             SizedBox(height: 16),
             BenefitsSection(benefitsText: benefitsText),
             SizedBox(height: 16),
+            Expanded(child: Container()),
             ActionButtonsSection(),
           ],
         ),
