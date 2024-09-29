@@ -51,6 +51,8 @@ class UserMgr(ModelObject):
     # ------------------------------
 
     def add_user(self, request: UserLogin) -> int:
+        Logger().log_info(f"Adding user: {request.model_dump_json()}", LogLevel.LOW_FREQ)
+
         with self.get_lock():
             # Email validation
             if not re.match(r"[^@]+@[^@]+\.[^@]+", request.userMail):
@@ -59,7 +61,7 @@ class UserMgr(ModelObject):
             if request.userMail in self._users:
                 raise ValueError(f"User with mail '{request.userMail}' already exists")
 
-            user_id = self.get_and_inc_counter()
+            user_id = self.get_and_inc_counter_unlocked()
             user = UserModel(userMail=request.userMail, userPassword=request.userPassword, userId=user_id,
                              userEventPays=[], userEvents=[])
 
