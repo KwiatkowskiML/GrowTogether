@@ -22,15 +22,10 @@ class EventCreationForm extends StatefulWidget {
 class _EventCreationFormState extends State<EventCreationForm> {
   final _formKey = GlobalKey<FormState>();
 
-  // Controllers for each field
   final TextEditingController _eventTitleController = TextEditingController();
   final TextEditingController _eventOwnerNameController =
       TextEditingController();
   final TextEditingController _eventGoalController = TextEditingController();
-  final TextEditingController _eventCurrentMoneyController =
-      TextEditingController();
-  final TextEditingController _eventContributorsNumberController =
-      TextEditingController();
   final TextEditingController _eventDescController = TextEditingController();
   final TextEditingController _eventOwnerContactMailController =
       TextEditingController();
@@ -62,10 +57,8 @@ class _EventCreationFormState extends State<EventCreationForm> {
         eventOwnerName: _eventOwnerNameController.text,
         eventOwnerId: widget.eventOwnerId,
         eventGoal: double.tryParse(_eventGoalController.text) ?? 0.0,
-        eventCurrentMoney:
-            double.tryParse(_eventCurrentMoneyController.text) ?? 0.0,
-        eventContributorsNumber:
-            int.tryParse(_eventContributorsNumberController.text) ?? 0,
+        eventCurrentMoney: 0.0, // Default to 0
+        eventContributorsNumber: 0, // Default to 0
         eventLat: widget.eventLat,
         eventLon: widget.eventLon,
         eventDesc: _eventDescController.text,
@@ -82,12 +75,11 @@ class _EventCreationFormState extends State<EventCreationForm> {
   // Dummy function to handle form data submission
   void _sendData(Event formData) {
     eventsList.add(formData);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Event created successfully!'),
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => SuccessScreen(),
       ),
     );
-    Navigator.of(context).pop();
   }
 
   @override
@@ -106,6 +98,8 @@ class _EventCreationFormState extends State<EventCreationForm> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: 16),
+
+                // Section for Event Details
                 Text(
                   'Event Details',
                   style: TextStyle(
@@ -114,39 +108,21 @@ class _EventCreationFormState extends State<EventCreationForm> {
                   ),
                 ),
                 SizedBox(height: 16),
-
-                Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  elevation: 4,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      children: [
-                        _buildTextField(_eventTitleController, 'Event Title',
-                            'Please enter an event title'),
-                        SizedBox(height: 16),
-                        _buildTextField(
-                            _eventOwnerNameController,
-                            'Event Owner Name',
-                            'Please enter the owner\'s name'),
-                        SizedBox(height: 16),
-                        _buildNumberField(_eventGoalController,
-                            'Event Goal (e.g., amount to be raised)'),
-                        SizedBox(height: 16),
-                        _buildNumberField(_eventCurrentMoneyController,
-                            'Current Money Raised'),
-                        SizedBox(height: 16),
-                        _buildNumberField(_eventContributorsNumberController,
-                            'Number of Contributors'),
-                        SizedBox(height: 16),
-                        _buildMultilineField(
-                            _eventDescController,
-                            'Event Description',
-                            'Please provide a description'),
-                      ],
-                    ),
+                buildAnimatedCard(
+                  child: Column(
+                    children: [
+                      _buildTextField(_eventTitleController, 'Event Title',
+                          'Please enter an event title'),
+                      SizedBox(height: 16),
+                      _buildTextField(_eventOwnerNameController,
+                          'Event Owner Name', 'Please enter the owner\'s name'),
+                      SizedBox(height: 16),
+                      _buildNumberField(_eventGoalController,
+                          'Event Goal (e.g., amount to be raised)'),
+                      SizedBox(height: 16),
+                      _buildMultilineField(_eventDescController,
+                          'Event Description', 'Please provide a description'),
+                    ],
                   ),
                 ),
 
@@ -161,11 +137,7 @@ class _EventCreationFormState extends State<EventCreationForm> {
                   ),
                 ),
                 SizedBox(height: 16),
-                Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  elevation: 4,
+                buildAnimatedCard(
                   child: Column(
                     children: [
                       ListTile(
@@ -208,49 +180,64 @@ class _EventCreationFormState extends State<EventCreationForm> {
                   ),
                 ),
                 SizedBox(height: 16),
-                Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  elevation: 4,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      children: [
-                        _buildTextField(
-                            _eventOwnerContactMailController,
-                            'Owner Contact Email',
-                            'Please provide a contact email'),
-                        SizedBox(height: 16),
-                        _buildMultilineField(
-                            _eventBenefitDescController,
-                            'Benefit Description',
-                            'Please describe the benefits for supporters'),
-                      ],
-                    ),
+                buildAnimatedCard(
+                  child: Column(
+                    children: [
+                      _buildTextField(
+                          _eventOwnerContactMailController,
+                          'Owner Contact Email',
+                          'Please provide a contact email'),
+                      SizedBox(height: 16),
+                      _buildMultilineField(
+                          _eventBenefitDescController,
+                          'Benefit Description',
+                          'Please describe the benefits for supporters'),
+                    ],
                   ),
                 ),
 
                 SizedBox(height: 24),
 
-                // Submit button
+                // Hero animation for submit button
                 Align(
                   alignment: Alignment.center,
-                  child: ElevatedButton(
-                    onPressed: _submitForm,
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 32, vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+                  child: Hero(
+                    tag: 'submit-button',
+                    child: ElevatedButton(
+                      onPressed: _submitForm,
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 32, vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
+                      child: Text('Submit Event'),
                     ),
-                    child: Text('Submit Event'),
                   ),
                 ),
+                SizedBox(height: 16),
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  // Animated card for modern feel
+  Widget buildAnimatedCard({required Widget child}) {
+    return AnimatedOpacity(
+      opacity: 1.0,
+      duration: Duration(milliseconds: 500),
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        elevation: 4,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: child,
         ),
       ),
     );
@@ -311,6 +298,54 @@ class _EventCreationFormState extends State<EventCreationForm> {
         }
         return null;
       },
+    );
+  }
+}
+
+// Success screen with timeout to navigate back
+class SuccessScreen extends StatefulWidget {
+  @override
+  _SuccessScreenState createState() => _SuccessScreenState();
+}
+
+class _SuccessScreenState extends State<SuccessScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration(seconds: 1), () {
+      Navigator.of(context).pop();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Hero(
+          tag: 'submit-button',
+          child: Material(
+            type: MaterialType.transparency,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.check_circle,
+                  color: Colors.green,
+                  size: 100,
+                ),
+                SizedBox(height: 20),
+                Text(
+                  'Event Created Successfully!',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

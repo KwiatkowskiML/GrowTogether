@@ -50,7 +50,7 @@ class _MapScreenState extends State<MapScreen> {
               final screenWidth = mediaQuery.size.width;
               final screenHeight = mediaQuery.size.height;
 
-              bool isSmall = screenWidth < 1000;
+              bool isSmall = screenWidth < 1200;
 
               double maxWidth = screenWidth * 2.3 / 3;
               double maxHeight = screenHeight * 2.3 / 3;
