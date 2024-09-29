@@ -32,73 +32,73 @@ class GrowTogetherApp extends StatelessWidget {
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({super.key});
-  final GlobalKey<MapScreenState> _key = GlobalKey();
 
-  
+  final GlobalKey<MapScreenState> _key = GlobalKey();
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<Widget> _buildSearchSuggestions(String query, SearchController controller) {
+  List<Widget> _buildSearchSuggestions(
+      String query, SearchController controller) {
     if (query.isEmpty) return [];
 
     final lowercaseQuery = query.toLowerCase();
-    final filteredEvents = eventsList.where((event) =>
-        event.eventTitle.toLowerCase().contains(lowercaseQuery)).toList();
+    final filteredEvents = eventsList
+        .where(
+            (event) => event.eventTitle.toLowerCase().contains(lowercaseQuery))
+        .toList();
 
-    return filteredEvents.map((event) => ListTile(
-      title: Text(event.eventTitle),
-      subtitle: Text(
-        event.eventDesc,
-        maxLines: 2,
-        overflow: TextOverflow.ellipsis,
-      ),
-      onTap: () async {
-        print('Selected event: ${event.eventTitle}');
-        widget._key.currentState?.updatePosition(event.eventLat, event.eventLon);
-        
-        // Close the suggestions view
-        controller.closeView(event.eventTitle);  // Pass the selected item
-        await Future.delayed(Duration(seconds: 1));
+    return filteredEvents
+        .map((event) => ListTile(
+              title: Text(event.eventTitle),
+              subtitle: Text(
+                event.eventDesc,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+              onTap: () async {
+                print('Selected event: ${event.eventTitle}');
+                widget._key.currentState
+                    ?.updatePosition(event.eventLat, event.eventLon);
 
-        widget._key.currentState?.showPopUp(event);
-      },
-    )).toList();
+                // Close the suggestions view
+                controller
+                    .closeView(event.eventTitle); // Pass the selected item
+                await Future.delayed(Duration(seconds: 1));
+
+                widget._key.currentState?.showPopUp(event);
+              },
+            ))
+        .toList();
   }
 
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Grow Together'),
-        actions: [
-          Padding(padding: const EdgeInsets.all(8.0), child: LoginWidget()),
-        ],
-      ),
-      body: StreamBuilder<bool>(
-        stream: UserSingleton().loginStream,
-        initialData: UserSingleton().isLogged(),
-        builder: (context, snapshot) {
-          return Stack(
-            children: <Widget>[
-          MapScreen(key: widget._key),
-          Positioned(
-            top: 8,
-            left: 8,
-            right: 8,
-            child: SearchAnchor.bar(
-              barHintText: 'Search events...',
-              suggestionsBuilder: (BuildContext context, SearchController controller) {
-                return _buildSearchSuggestions(controller.text, controller);
-              },
+        appBar: AppBar(
+          title: const Text('Grow Together'),
+          actions: [
+            Padding(padding: const EdgeInsets.all(8.0), child: LoginWidget()),
+          ],
+        ),
+        body: Stack(
+          children: <Widget>[
+            MapScreen(key: widget._key),
+            Positioned(
+              top: 8,
+              left: 8,
+              right: 8,
+              child: SearchAnchor.bar(
+                barHintText: 'Search events...',
+                suggestionsBuilder:
+                    (BuildContext context, SearchController controller) {
+                  return _buildSearchSuggestions(controller.text, controller);
+                },
+              ),
             ),
-          ),
-        ],
-          );
-        },
-      ),
-    );
+            SideBar()
+          ],
+        ));
   }
 }

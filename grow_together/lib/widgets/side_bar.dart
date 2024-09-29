@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:grow_together/conn/api_calls.dart';
 import 'package:grow_together/models/user_request.dart';
 import 'package:grow_together/user.dart';
-
 import '../models/event.dart';
 import '../models/event_pay.dart';
 
@@ -16,19 +15,9 @@ class SideBar extends StatefulWidget {
 class _SideBarState extends State<SideBar> {
   bool _isExpanded = false;
   int _currentPage = 0;
+  List<EventPay> _eventPays = [];
+  List<Event> _events = [];
 
-  late List <EventPay> _eventPays ;
-  late List<Event> _events;
-
-  @override
-  void initState() async {
-
-    _events = await ApiCalls.GetUserEvent(UserRequest(userId: UserSingleton().token!));
-    _eventPays = await ApiCalls.GetUserPays(UserRequest(userId: UserSingleton().token!));
-
-    super.initState();
-  }
-  
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -38,7 +27,7 @@ class _SideBarState extends State<SideBar> {
           top: 0,
           bottom: 0,
           child: MouseRegion(
-            onEnter: (_) => setState(() => _isExpanded = true),
+            onEnter: (_) => _setVisibleTrue(),
             onExit: (_) => setState(() => _isExpanded = false),
             child: AnimatedContainer(
               duration: Duration(milliseconds: 300),
@@ -68,7 +57,7 @@ class _SideBarState extends State<SideBar> {
           top: 0,
           bottom: 0,
           child: MouseRegion(
-            onEnter: (_) => setState(() => _isExpanded = true),
+            onEnter: (_) => _setVisibleTrue(),
             child: Container(
               width: 20,
               decoration: BoxDecoration(
@@ -107,12 +96,8 @@ class _SideBarState extends State<SideBar> {
       color: Colors.blue.shade50,
       child: Row(
         children: [
-          Expanded(
-            child: _buildTab('Event Pays', 0),
-          ),
-          Expanded(
-            child: _buildTab('Events', 1),
-          ),
+          Expanded(child: _buildTab('Event Pays', 0)),
+          Expanded(child: _buildTab('Events', 1)),
         ],
       ),
     );
@@ -145,6 +130,23 @@ class _SideBarState extends State<SideBar> {
 
   Widget _buildContent() {
     return _currentPage == 0 ? _buildEventPaysPage() : _buildEventsPage();
+  }
+
+  Future<void> _setVisibleTrue() async {
+    setState(() => _isExpanded = true);
+    _fetchData();
+  }
+
+  Future<void> _fetchData() async {
+    final userId = UserSingleton().token;
+    if (userId != null) {
+      final events = await ApiCalls.GetUserEvent(UserRequest(userId: userId));
+      final eventPays = await ApiCalls.GetUserPays(UserRequest(userId: userId));
+      setState(() {
+        _events = events;
+        _eventPays = eventPays;
+      });
+    }
   }
 
   Widget _buildEventPaysPage() {
