@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class GoalProgressSection extends StatelessWidget {
+class GoalProgressSection extends StatefulWidget {
   final double assembledAmount;
   final double totalGoalAmount;
   final int growersCount;
@@ -11,6 +11,36 @@ class GoalProgressSection extends StatelessWidget {
     required this.totalGoalAmount,
     required this.growersCount,
   });
+
+  @override
+  _GoalProgressSectionState createState() => _GoalProgressSectionState();
+}
+
+class _GoalProgressSectionState extends State<GoalProgressSection>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<Color?> _colorAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(
+      duration: const Duration(seconds: 2),
+      vsync: this,
+    )..repeat(reverse: true);
+
+    _colorAnimation = ColorTween(
+      begin: Colors.purple,
+      end: Colors.deepPurpleAccent,
+    ).animate(_controller);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +56,7 @@ class GoalProgressSection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              '$assembledAmount\$ Assembled',
+              '${widget.assembledAmount}\$ Assembled',
               style: TextStyle(
                 color: Colors.green,
                 fontWeight: FontWeight.bold,
@@ -34,7 +64,7 @@ class GoalProgressSection extends StatelessWidget {
               ),
             ),
             Text(
-              '$totalGoalAmount\$ Needed',
+              '${widget.totalGoalAmount}\$ Needed',
               style: TextStyle(
                 color: Colors.grey[600],
                 fontWeight: FontWeight.bold,
@@ -44,15 +74,21 @@ class GoalProgressSection extends StatelessWidget {
           ],
         ),
         SizedBox(height: 8),
-        LinearProgressIndicator(
-          value: assembledAmount / totalGoalAmount,
-          backgroundColor: Colors.grey[300],
-          color: Colors.purple,
-          minHeight: 6,
+        AnimatedBuilder(
+          animation: _controller,
+          builder: (context, child) {
+            return LinearProgressIndicator(
+              value: widget.assembledAmount / widget.totalGoalAmount,
+              backgroundColor:
+                  Colors.grey[300], // Keeps the background constant
+              valueColor: AlwaysStoppedAnimation(_colorAnimation.value),
+              minHeight: 6,
+            );
+          },
         ),
         SizedBox(height: 8),
         Text(
-          '$growersCount Growers',
+          '${widget.growersCount} Growers',
           style: TextStyle(
             fontSize: 12,
             color: Colors.grey[600],

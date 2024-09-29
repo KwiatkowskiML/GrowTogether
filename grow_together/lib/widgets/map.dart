@@ -36,7 +36,38 @@ class _MapScreenState extends State<MapScreen> {
     }
   }
 
-  // Show a custom popup or widget
+  Future<void> _getVisibleRegion() async {
+    if (_controller != null) {
+      LatLngBounds bounds = await _controller!.getVisibleRegion();
+      _filterEventsByViewport(bounds);
+    }
+  }
+
+  void _filterEventsByViewport(LatLngBounds bounds) {
+    setState(() {
+      _markers.clear();
+      for (var event in eventsList) {
+        if (_isInBounds(bounds, LatLng(event.eventLat, event.eventLon))) {
+          var marker = Marker(
+            markerId: MarkerId(event.eventTitle),
+            position: LatLng(event.eventLat, event.eventLon),
+            onTap: () {
+              _showCustomPopup(event);
+            },
+          );
+          _markers.add(marker);
+        }
+      }
+    });
+  }
+
+  bool _isInBounds(LatLngBounds bounds, LatLng position) {
+    return position.latitude >= bounds.southwest.latitude &&
+        position.latitude <= bounds.northeast.latitude &&
+        position.longitude >= bounds.southwest.longitude &&
+        position.longitude <= bounds.northeast.longitude;
+  }
+
   void _showCustomPopup(event) {
     showDialog(
       context: context,
@@ -50,7 +81,7 @@ class _MapScreenState extends State<MapScreen> {
               final screenWidth = mediaQuery.size.width;
               final screenHeight = mediaQuery.size.height;
 
-              bool isSmall = screenWidth < 1000;
+              bool isSmall = screenWidth < 1200;
 
               double maxWidth = screenWidth * 2.3 / 3;
               double maxHeight = screenHeight * 2.3 / 3;
@@ -94,29 +125,16 @@ class _MapScreenState extends State<MapScreen> {
       body: GoogleMap(
         onMapCreated: (GoogleMapController controller) {
           _controller = controller;
+          _getVisibleRegion();
+        },
+        onCameraIdle: () {
+          _getVisibleRegion();
         },
         initialCameraPosition: const CameraPosition(
           target: LatLng(50.049683, 19.944544),
           zoom: 14,
         ),
         markers: _markers,
-        onLongPress: (LatLng latLng) {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => Scaffold(
-                        body: EventCreationForm(
-                          eventLat: latLng.latitude,
-                          eventLon: latLng.longitude,
-                          eventOwnerId: 1, // TODO: Replace with actual user ID
-                        ),
-                      ))).then((value) {
-            setState(() {
-              _markers.clear();
-              _setMarkers();
-            });
-          });
-        },
       ),
     );
   }

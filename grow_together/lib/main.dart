@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:grow_together/widgets/add_event_button.dart';
 import 'package:grow_together/widgets/floating_search_bar.dart';
 import 'package:grow_together/widgets/login_widget.dart';
 import 'package:grow_together/widgets/map.dart';
@@ -41,7 +40,7 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
       body: Stack(
-        children: <Widget>[MapScreen(), FloatingSearchBar(), AddEventButton()],
+        children: <Widget>[MapScreen(), FloatingSearchBar()],
       ),
     );
   }
