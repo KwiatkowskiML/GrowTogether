@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:email_validator/email_validator.dart'; // Import email validator package
+import 'package:email_validator/email_validator.dart';
 
 import '../user.dart';
 
 class AuthForm extends StatefulWidget {
   final bool isLogin;
+  final VoidCallback onAuthSuccess;
 
-  const AuthForm({Key? key, required this.isLogin}) : super(key: key);
+  const AuthForm({
+    Key? key,
+    required this.isLogin,
+    required this.onAuthSuccess,
+  }) : super(key: key);
 
   @override
   _AuthFormState createState() => _AuthFormState();
@@ -25,7 +30,6 @@ class _AuthFormState extends State<AuthForm> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          // Email Field with Proper Validation
           TextFormField(
             decoration: const InputDecoration(labelText: 'Email'),
             validator: (value) {
@@ -41,7 +45,6 @@ class _AuthFormState extends State<AuthForm> {
               _email = value!;
             },
           ),
-          // Password Field with Minimum Length Check
           TextFormField(
             decoration: const InputDecoration(labelText: 'Password'),
             obscureText: true,
@@ -60,7 +63,6 @@ class _AuthFormState extends State<AuthForm> {
               });
             },
           ),
-          // Confirm Password Field for Registration
           if (!widget.isLogin)
             TextFormField(
               decoration: const InputDecoration(labelText: 'Confirm Password'),
@@ -83,15 +85,17 @@ class _AuthFormState extends State<AuthForm> {
             child: ElevatedButton(
               child: Text(widget.isLogin ? 'Login' : 'Register'),
               onPressed: () async {
-                // Validate the form before saving the data
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
 
                   try {
-                    widget.isLogin ? await UserSingleton()
-                        .login_user(email: _email, password: _password) :
-                    await UserSingleton()
-                        .register_user(email: _email, password: _password);
+                    if (widget.isLogin) {
+                      await UserSingleton().login_user(email: _email, password: _password);
+                    } else {
+                      await UserSingleton().register_user(email: _email, password: _password);
+                    }
+                    widget.onAuthSuccess(); // Call the onAuthSuccess callback
+                    Navigator.of(context).pop();
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
@@ -100,8 +104,6 @@ class _AuthFormState extends State<AuthForm> {
                       ),
                     );
                   }
-
-                  Navigator.of(context).pop();
                 }
               },
             ),
@@ -120,14 +122,16 @@ class _AuthFormState extends State<AuthForm> {
     );
   }
 
-  // Modal for switching between login and register
   void _showAuthModal(BuildContext context, {required bool isLogin}) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(isLogin ? 'Login' : 'Register'),
-          content: AuthForm(isLogin: isLogin),
+          content: AuthForm(
+            isLogin: isLogin,
+            onAuthSuccess: widget.onAuthSuccess,
+          ),
           actions: <Widget>[
             TextButton(
               child: const Text('Cancel'),
