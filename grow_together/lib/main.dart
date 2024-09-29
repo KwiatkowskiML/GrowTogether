@@ -41,12 +41,15 @@ class HomeScreen extends StatelessWidget {
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
       ),
-      onTap: () {
+      onTap: () async {
         print('Selected event: ${event.eventTitle}');
         _key.currentState?.updatePosition(event.eventLat, event.eventLon);
         
         // Close the suggestions view
         controller.closeView(event.eventTitle);  // Pass the selected item
+        await Future.delayed(Duration(seconds: 1));
+
+        _key.currentState?.showPopUp(event);
       },
     )).toList();
   }

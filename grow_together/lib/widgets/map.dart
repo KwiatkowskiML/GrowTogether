@@ -31,6 +31,12 @@ class MapScreenState extends State<MapScreen> {
     });
   }
 
+  void showPopUp(event){
+    setState(() {
+      _showCustomPopup(event);
+    });
+  }
+
   @override
   void initState() {
     super.initState();
