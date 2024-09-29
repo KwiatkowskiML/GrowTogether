@@ -44,9 +44,8 @@ class _GoalProgressSectionState extends State<GoalProgressSection>
 
   @override
   Widget build(BuildContext context) {
-    // Calculate scaling factor based on screen width
     double screenWidth = MediaQuery.of(context).size.width;
-    double scaleFactor = (screenWidth / 375.0).clamp(1.0, 1.5);
+    double scaleFactor = (screenWidth / 375.0).clamp(0.3, 1.5);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
